@@ -1,0 +1,8 @@
+[31-Aug-2018 06:33:43 UTC] PHP Parse error:  syntax error, unexpected '$mysqli' (T_VARIABLE) in E:\gwTest\cs\tp5\application\Gw\DbList\test.php on line 8
+[31-Aug-2018 06:33:43 UTC] PHP 
+[31-Aug-2018 06:33:43 UTC] PHP Dump $_SERVER
+[31-Aug-2018 06:33:43 UTC] PHP    $_SERVER['REQUEST_METHOD'] is undefined
+[31-Aug-2018 06:33:43 UTC] PHP    $_SERVER['REQUEST_URI'] is undefined
+[31-Aug-2018 06:33:43 UTC] PHP    $_SERVER['HTTP_USER_AGENT'] is undefined
+[31-Aug-2018 06:33:43 UTC] PHP Dump $_REQUEST
+[31-Aug-2018 06:33:43 UTC] PHP 
