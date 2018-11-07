@@ -1,15 +1,14 @@
 <?php
 namespace app\index\controller;
 
-use \Cencms\Test;
+use app\common\logic as logic;
 
 class Index
 {
     public function index()
     {
-		$Test = new Test();
-		$Test->print();
-        return ;
+		$a = logic\Mch::create([]);
+        return json($a);
     }
 
     public function hello($name = 'ThinkPHP5')

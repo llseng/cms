@@ -125,6 +125,29 @@ return [
 	)ENGINE=innodb default charset=utf8 comment='实名认证信息表'",
 	*/
 	
+	//系统基础配置
+	"cen_config" => "CREATE TABLE cen_config(
+
+		`id` smallint(11) unsigned not null AUTO_INCREMENT comment '主键',
+
+		`name` varchar(50) not null comment '配置key值',
+
+		`value` varchar(512) not null comment '配置value值',
+
+		`group` varchar(50) not null default '' comment '配置分组',
+
+		`intro` varchar(50) not null comment '配置描述',
+
+		`addtime` int(11) unsigned not null default 0 comment '创建时间',
+
+		`settime` int(11) unsigned not null default 0 comment '修改时间',
+
+		PRIMARY KEY (`id`),
+
+		UNIQUE KEY `gn`(`group`,`name`)
+
+	)ENGINE=MYISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='支付系统基础配置'",
+	
 	//商户列表
 	'cen_mch' => "create table cen_mch(
 	
@@ -145,6 +168,12 @@ return [
 		`codekey` varchar(32) not null comment '接口秘钥',
 		
 		`create_time` int(11) unsigned not null default 0 comment '创建时间搓',
+		
+		`create_ip` varchar(20) not null default '' comment '创建ip',
+		
+		`last_ip` varchar(20) comment '最后登录IP',
+		
+		`last_time` int(11) unsigned not null default 0 comment '最后登录时间',
 		
 		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
 		
