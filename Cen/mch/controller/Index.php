@@ -11,12 +11,31 @@
 namespace app\mch\controller;
 
 
+
 class Index
 {
 	//构造函数
 	public function __construct()
 	{
 	
+	}
+	
+	//商户注册
+	public function register()
+	{
+		$post = input('post.');
+		
+		//数据
+		$data = [
+			'name' => $post['name'],
+			'nick' => $post['nick'],
+			'phone' => $post['phone'],
+			'password' => $post['password'],
+		];
+		
+		//验证
+		//$result = 
+		
 	}
 
 }

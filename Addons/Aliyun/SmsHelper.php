@@ -9,6 +9,23 @@ namespace Addons\Aliyun;
  */
 class SmsHelper {
 
+	//秘钥ID
+	public $akId;
+	
+	//秘钥
+	public $akSecret;
+	
+	//构造函数
+	public function __construct()
+	{
+		//初始化ak配置
+		
+		$this->akId = "LTAI0maUqu8JtmWg";
+		
+		$this->akSecret = "1L5pI9QoqtJpcjzdzOxmXO5fHTSFJk";
+		
+	}
+
     /**
      * 生成签名并发起请求
      *
@@ -46,7 +63,7 @@ class SmsHelper {
 
         try {
             $content = $this->fetchContent($url, $method, "Signature={$signature}{$sortedQueryStringTmp}");
-            return json_decode($content);
+            return json_decode($content,1);
         } catch( \Exception $e) {
             return false;
         }
@@ -95,6 +112,18 @@ class SmsHelper {
         return $rtn;
     }
 	
+	//
+	static $Instance;
+	
+	static public function init()
+	{
+		if( !self::$Instance )
+		{
+			self::$Instance = new self();
+		}
+		
+		return self::$Instance;
+	}
 	
 	/**
 	 * 发送短信
@@ -103,7 +132,7 @@ class SmsHelper {
 	 * @product  签名
 	 * @tempcode  模板ID
 	 */
-	static public function sendSms($code,$phone,$product = '念菲网络',$tempcode = 'SMS_116820224') {
+	static public function sendSms(array $param,$phone,$product = '念菲网络',$tempcode = 'SMS_116820224') {
 
 		$params = array ();
 
@@ -121,10 +150,13 @@ class SmsHelper {
 		$params["TemplateCode"] = $tempcode;
 
 		// fixme 可选: 设置模板参数, 假如模板中存在变量需要替换则为必填项
+		/*
 		$params['TemplateParam'] = Array (
 			"code" => $code,
 			"product" => '1'
-		);
+		)
+		*/
+		;$params['TemplateParam'] = $param;
 
 		// fixme 可选: 设置发送短信流水号
 		$params['OutId'] = "12345";
@@ -138,12 +170,12 @@ class SmsHelper {
 			$params["TemplateParam"] = json_encode($params["TemplateParam"], JSON_UNESCAPED_UNICODE);
 		}
 
-		// 初始化SignatureHelper实例用于设置参数，签名以及发送请求
-		$helper = new SmsHelper();
+		// 初始化SmsHelper实例用于设置参数，签名以及发送请求
+		$helper = self::init();
 
 		// fixme 必填: 请参阅 https://ak-console.aliyun.com/ 取得您的AK信息
-		$accessKeyId = self::$akId;
-		$accessKeySecret = self::$akSecret;
+		$accessKeyId = $helper->akId;
+		$accessKeySecret = $helper->akSecret;
 
 		// 此处可能会抛出异常，注意catch
 		$content = $helper->request(
@@ -151,13 +183,25 @@ class SmsHelper {
 			$accessKeySecret,
 			"dysmsapi.aliyuncs.com",
 			array_merge($params, array(
-				"RegionId" => "cn-guangzhou",
+				"RegionId" => "cn-hangzhou",
 				"Action" => "SendSms",
-				"Version" => "2018-11-07",
+				"Version" => "2017-05-25",
 			)),
 			$security
 		);
+		
+		//请求失败
+		if( !$content )
+		{
+			return '接口请求失败';
+		}
 
+		//请求异常
+		if( strtoupper($content['Code']) !== "OK" )
+		{
+			return '接口请求异常 : ' . $content['Message'];
+		}
+		
 		return $content;
 	}
 	

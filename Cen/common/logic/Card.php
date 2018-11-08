@@ -2,8 +2,6 @@
 namespace app\common\logic;
 
 use \Db;
-use \Request;
-use \Cencms\LtLogger;
 use \Addons\Aliyun as Aliyuns;
 
 class Card 
@@ -84,11 +82,11 @@ class Card
 		if( is_string($requestCard) ) 
 		{
 			//记录日志
-			self::log([
+			Logger::log([
 				'idcard' => $idcard,
 				'real_name' => $realName,
 				'error' => $requestCard,
-			]);
+			],__DIR__ . '/' . 'Card/' . date("Y-m/d") . '.log');
 			
 			return false;
 		}
@@ -101,29 +99,6 @@ class Card
 		//返回认证数据
 		return $result;
 		
-	}
-	
-	//记录日志
-	static public function log(array $data)
-	{
-		if( empty($data) ) return false;
-		
-		$data['ip'] = Request::ip();
-		
-		$data['date'] = date("Y-m-d H:i:s");
-		
-		$data['post'] = $_POST;
-		
-		$msg = [];
-		
-		foreach( $data as $key => $val )
-		{
-			$msg[] = "[ {$key} ] : " . var_export($val,1);
-		}
-		
-		$logger = new LtLogger(__DIR__ . '/' . 'Card/' . date("Y-m/d") . '.log');
-		
-		$logger->log($msg);
 	}
 	
 	//构造函数

@@ -7,8 +7,7 @@ class Index
 {
     public function index()
     {
-		$a = logic\Mch::create([]);
-        return json($a);
+		var_dump(logic\Sms::send('123456','18797818194'));
     }
 
     public function hello($name = 'ThinkPHP5')

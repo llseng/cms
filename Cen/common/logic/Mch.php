@@ -11,19 +11,15 @@
 
 namespace app\common\logic;
 
+use \Db;
 use \Request;
 
 class Mch
 {
+	//数据表名
+	static public $dbName = "mch";
 
-	//构造函数
-	public function __construct()
-	{
-	
-	
-	}
-
-	//创建商户
+	//创建商户 (返回数据自增ID)
 	static public function create(array $data)
 	{
 		//商户信息
@@ -44,11 +40,58 @@ class Mch
 		//创建时间
 		$insert['create_time'] = NOWTIME;
 		
-		return $insert;
+		//创建IP
+		$insert['create_ip'] = Request::ip();
+		
+		$result = Db::name(self::$dbName)->insertGetId($insert);
+		
+		return $result ?: false;
 		
 	}
 	
-	//提交创建商户信息
+	//商户显示字段
+	static public $field = "id as mch_id,name,nick,phone,last_ip,last_time";
 	
+	//获取商户信息 BY 商户名
+	static public function getMchByName($name)
+	{
+		//条件
+		$where = ['name'=>$name];
+		
+		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->find();
+		
+		return $result ?: false;
+		
+	}
+	
+	//注册商户
+	static public function register(array $data)
+	{
+		//注册信息
+		$mchData = [];
+		
+		$mchData['name'] = $data['name'];
+		$mchData['nick'] = $data['nick'];
+		$mchData['phone'] = $data['phone'];
+		$mchData['password'] = my_md5($data['password']);
+		
+		//创建商户获取商户ID
+		$mch_id = self::create($mchData);
+		if( !$mch_id ) return false;
+		
+		unset($mchData['password']);
+		$mchData['mch_id'] = $mch_id;
+		
+		//返回商户信息
+		return $mchData;
+		
+	}
+
+	//构造函数
+	public function __construct()
+	{
+	
+	
+	}
 	
 }

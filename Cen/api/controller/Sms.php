@@ -8,35 +8,47 @@
 // +----------------------------------------------------------------------
 // | Author: lls_woods <1300904522@qq.com>
 // +----------------------------------------------------------------------
+namespace app\api\controller;
 
-namespace app\api\logic;
+use app\api\logic as logics;
+use app\common\logic as logic;
 
-use app\api\validate as validates;
-use app\common\validate as validate;
-
-class Card
+class Sms extends \Cencms\ApiBase
 {
 	//构造函数
 	public function __construct()
 	{
-		
 	
 	}
-	
-	//认证请求数据验证
-	static public function authV(array $data)
-	{
-		$validate = new validate\Card();
 
-		$result = $validate->scene('auth')->check($data);
+	//发送验证短信(单条)
+	public function send()
+	{
+		//POST提交
+		$post = input('post.');
+	
+		$data = [
+			'code' => $post['code'],
+			'phone' => $post['phone'],
+		];
 		
-		if( !$result )
+		$result = logics\Sms::sendV($data);
+		if( $result !== true )
 		{
-			return $validate->getError();
+			return json(self::returnError($result));
 		}
 		
-		return true;
+		$send = logic\Sms::send($data['code'],$data['phone']);
+		
+		if( !$send ) 
+		{
+			return json(self::returnError('发送失败'));
+		}
+		
+		return json(self::returnSuccess([],'发送成功'));
+	
 	}
 	
+	//
 
 }

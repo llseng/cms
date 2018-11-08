@@ -49,8 +49,8 @@ class IdcardAuth
 		
 		$url = $host . $path . "?" . $querys;
 
-		//$result = curl_request($url,$method,[],$headers);
-		$result = '{"status":"205","msg":"身份证格式不正确！","idCard":"123456789123456789","name":"林胜","sex":"","area":"","province":"","city":"","prefecture":"","birthday":"","addrCode":"","lastCode":""}';
+		$result = curl_request($url,$method,[],$headers);
+		
 		//返回响应数据
 		return $result;
 

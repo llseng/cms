@@ -14,21 +14,22 @@ namespace app\api\logic;
 use app\api\validate as validates;
 use app\common\validate as validate;
 
-class Card
+class Sms
 {
+
 	//构造函数
 	public function __construct()
 	{
-		
+	
 	
 	}
 	
-	//认证请求数据验证
-	static public function authV(array $data)
+	//数据验证
+	static public function sendV(array $data)
 	{
-		$validate = new validate\Card();
-
-		$result = $validate->scene('auth')->check($data);
+		$validate = new validate\Sms();
+		
+		$result = $validate->scene('send')->check($data);
 		
 		if( !$result )
 		{
@@ -38,5 +39,5 @@ class Card
 		return true;
 	}
 	
-
+	
 }

@@ -1,5 +1,15 @@
 <?php
-namespace app\api\validate;
+// +----------------------------------------------------------------------
+// | LLS_WOODS [ Constantly improve yourself ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 念菲网络 (http://www.cencms.com)
+// +----------------------------------------------------------------------
+// | Creation time 2018-11-08
+// +----------------------------------------------------------------------
+// | Author: lls_woods <1300904522@qq.com>
+// +----------------------------------------------------------------------
+
+namespace app\common\validate;
 
 use think\Validate;
 
@@ -31,6 +41,9 @@ class Card extends Validate
 	];
 	
 	//验证场景
-	public $scene = [];
+	public $scene = [
+		//实名认证
+		'auth' => ['idcard','real_name'],
+	];
 
 }

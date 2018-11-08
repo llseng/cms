@@ -246,6 +246,41 @@ return [
 		
 	)engine=innodb default charset=utf8 auto_increment=1000 comment='手机号码列表'",
 	
+	//手机短信列表
+	'cen_smslist' => "create table cen_smslist(
+	
+		`id` int(11) unsigned not null auto_increment comment '主键ID',
+		
+		`biz_id` varchar(20) not null comment '第三方流水号',
+		
+		`mch_id` int(11) unsigned not null comment '商户ID',
+		
+		`apply_id` int(11) unsigned not null comment '应用ID',
+		
+		`phone` varchar(12) not null comment '接收手机号',
+		
+		`params` varchar(255) not null comment '请求参数',
+		
+		`product` varchar(10) not null comment '签名',
+		
+		`temp_id` varchar(20) not null comment '模板ID',
+		
+		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
+		
+		primary key(`id`),
+		
+		key `mch_id`(`mch_id`),
+		
+		key `apply_id`(`apply_id`),
+		
+		key `phone`(`phone`),
+		
+		key `create_time`(`create_time`)
+		
+	)engine=innodb default charset=utf8 comment='手机短信列表'",
+	
 	//身份证信息列表
 	'cen_card' => "create table cen_card(
 	
