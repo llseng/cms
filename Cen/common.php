@@ -58,7 +58,7 @@ function curl_request($url,$method = "get",array $data = [],array $header = [],$
 
     //设置请求路径
     $setopt[CURLOPT_URL] = $url;
-
+	
     //是否是HTTPS请求
     if(preg_match("/https:\/\//i",$url))
     {
@@ -174,5 +174,13 @@ function array_trim_all(array $arr, $recursive = false)
     
     return $arr;
 
+}
+
+//是否是手机号
+function is_phone($phone)
+{
+	$result = preg_match("/^1[3|4|5|7|8]\d{9}$/",$phone);
+	
+	return $result;
 }
 

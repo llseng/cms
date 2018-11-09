@@ -50,7 +50,7 @@ class Sms extends Validate
 		//手机最后一条短信记录
 		$result = logic\Sms::getPhoneLastSms($value);
 		
-		if( !result ) return true;
+		if( !$result ) return true;
 		
 		//时间间隔
 		$gap = NOWTIME - $result['create_time'];

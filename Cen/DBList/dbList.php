@@ -167,6 +167,8 @@ return [
 		
 		`codekey` varchar(32) not null comment '接口秘钥',
 		
+		`idcard` varchar(18) not null default 0 comment '身份证号',
+		
 		`create_time` int(11) unsigned not null default 0 comment '创建时间搓',
 		
 		`create_ip` varchar(20) not null default '' comment '创建ip',
@@ -180,6 +182,10 @@ return [
 		primary key(`id`),
 		
 		unique key `name`(`name`),
+		
+		unique key `phone`(`phone`),
+		
+		key `email`(`email`),
 		
 		key `create_time`(`create_time`)
 		

@@ -7,7 +7,8 @@ class Index
 {
     public function index()
     {
-		var_dump(logic\Sms::send('123456','18797818194'));
+		$json = \Addons\Taobao\TelAddr::get(18797818194);
+		var_dump($json);
     }
 
     public function hello($name = 'ThinkPHP5')

@@ -11,14 +11,12 @@
 
 namespace app\common\logic;
 
+use \Db;
 
 class Apply
 {
-	//构造函数
-	public function __construct()
-	{
-	
-	}
+	//数据表名
+	static public $dbName = "apply";
 	
 	//创建应用
 	static public function create(array $data)
@@ -41,8 +39,30 @@ class Apply
 		//创建时间
 		$insert['create_time'] = NOWTIME;
 		
-		return $insert;
+		$result = Db::name(self::$dbName)->insert($insert);
+		
+		return $return ?: false;
 		
 	}
+	
+	//获取应用信息
+	static public function getApplyByName($name)
+	{
+		//条件
+		$where = [];
+		$where['name'] = $name;
+		
+		//获取
+		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->find();
+		
+		return $result ?: false;
+	}
+	
+	//构造函数
+	public function __construct()
+	{
+	
+	}
+	
 
 }

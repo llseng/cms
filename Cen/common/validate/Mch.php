@@ -1,5 +1,5 @@
 <?php
-namespace app\mch\validate;
+namespace app\common\validate;
 
 use think\Validate;
 use app\common\logic as logic;
@@ -22,6 +22,9 @@ class Mch extends Validate
 		//商户密码
 		'password' => ['require', 'regex' => "/^\w{6,16}$/"],
 		
+		//商户登录名
+		'user' => ['require', 'regex' => "/^\S{6,20}$/"],
+		
 	];
 	
 	//错误提示
@@ -39,12 +42,16 @@ class Mch extends Validate
 		//商户密码
 		'password.regex' => '密码格式错误,仅支持英文数字下划线6~16位',
 	
+		//商户登录名
+		'user.regex' => '商户登录名格式错误,仅支持6~20位非空字符',
 	];
 	
 	//验证场景
 	public $scene = [
 		//商户注册
 		'reg' => ['name','phone','nick','password'],
+		//商户登录
+		'login' => ['user', 'password'],
 	];
 	
 	
@@ -54,7 +61,7 @@ class Mch extends Validate
 		//获取商户信息
 		$result = logic\Mch::getMchByName($value);
 		
-		if( !result ) return true;
+		if( !$result ) return true;
 		
 		return "商户名{$value}已存在,请换一个.";
 		

@@ -108,10 +108,22 @@ class Sms
 		
 		$insert['temp_id'] = $tempcode;
 		
+		//获取手机信息 (没有则创建)
+		$phoneData = Phone::getPhoneData($phone);
+		
 		//数据入库
 		$save = self::create($insert);
 		//入库失败
-		if( !$save ) die("入库失败");
+		if( !$save )
+		{
+			Logger::log([
+				'code' => $code,
+				'phone' => $phone,
+				'product' => $product,
+				'tempcode' => $tempcode,
+				'error' => '入库失败'
+			],__DIR__ . '/' . 'Sms/' . date("Y-m/d") . '.log');
+		}
 		
 		return true;
 		

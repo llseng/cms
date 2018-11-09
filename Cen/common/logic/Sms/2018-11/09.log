@@ -1,0 +1,35 @@
+[ code ] : '311098'
+[ phone ] : NULL
+[ product ] : false
+[ tempcode ] : false
+[ error ] : '接口请求异常 : PhoneNumbers is mandatory for this action.'
+[ ip ] : '127.0.0.1'
+[ date ] : '2018-11-09 14:20:35'
+[ post ] : array (
+)
+
+--------------------------------------------------------------------------------
+[ code ] : '960715'
+[ phone ] : NULL
+[ product ] : false
+[ tempcode ] : false
+[ error ] : '接口请求异常 : PhoneNumbers is mandatory for this action.'
+[ ip ] : '127.0.0.1'
+[ date ] : '2018-11-09 14:20:43'
+[ post ] : array (
+)
+
+--------------------------------------------------------------------------------
+[ code ] : '666666'
+[ phone ] : '18797818194'
+[ product ] : false
+[ tempcode ] : false
+[ error ] : '接口请求异常 : 触发分钟级流控Permits:1'
+[ ip ] : '127.0.0.1'
+[ date ] : '2018-11-09 18:20:00'
+[ post ] : array (
+  'code' => '666666',
+  'phone' => '18797818194',
+)
+
+--------------------------------------------------------------------------------

@@ -12,12 +12,16 @@
 namespace app\common\logic;
 
 use \Db;
+use \Session;
 use \Request;
 
 class Mch
 {
 	//数据表名
 	static public $dbName = "mch";
+	
+	//商户session作用域
+	static public $sessArea = "mch";
 
 	//创建商户 (返回数据自增ID)
 	static public function create(array $data)
@@ -64,6 +68,79 @@ class Mch
 		
 	}
 	
+	//获取商户信息 BY 手机号
+	static public function getMchByphone($phone)
+	{
+		//条件
+		$where = ['phone'=>$phone];
+		
+		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->find();
+		
+		return $result ?: false;
+		
+	}
+	
+	//登录获取数据
+	static public function getMchByLogin($user,$password)
+	{
+		//条件
+		$where = "password='" . cen_md5($password) . "'";
+		
+		//登录名是手机格式
+		if( is_phone($user) )
+		{
+			$result = Db::name(self::$dbName)->field(self::$field)->where("phone='{$user}' and " . $where)->find();
+		}
+		
+		//商户昵称登录
+		if( !$result){
+			$result = Db::name(self::$dbName)->field(self::$field)->where("name='{$user}' and " . $where)->find();
+		}
+		
+		return $result ?: false;
+	}
+	
+	//记录商户登录信息
+	static public function mchLoginOperation($mch_id)
+	{
+		//
+		$update = [];
+		
+		//登录IP
+		$update['last_ip'] = Request::ip();
+		
+		//登录时间
+		$update['last_time'] = NOWTIME;
+		
+		$result = Db::name(self::$dbName)->where("id={$mch_id}")->update($update);
+		
+		return $result ? true : false;
+	}
+	
+	//商户登录 (保存商户SESSION)
+	static public function setLogin($mchData)
+	{
+		Session::set('user',$mchData,self::$sessArea);
+		
+		self::mchLoginOperation($mchData['mch_id']);
+		
+		return $mchData;
+	}
+	
+	//商户登录数据 (商户登录SESSION数据)
+	static public function getLogin()
+	{
+		$mchData = Session::get('user',self::$sessArea);
+		
+		return $mchData;
+	}
+	
+	//商户推出 (清楚商户SESSION)
+	static public function loginClose()
+	{
+		Session::clear(self::$sessArea);
+	}
+	
 	//注册商户
 	static public function register(array $data)
 	{
@@ -73,7 +150,7 @@ class Mch
 		$mchData['name'] = $data['name'];
 		$mchData['nick'] = $data['nick'];
 		$mchData['phone'] = $data['phone'];
-		$mchData['password'] = my_md5($data['password']);
+		$mchData['password'] = cen_md5($data['password']);
 		
 		//创建商户获取商户ID
 		$mch_id = self::create($mchData);
