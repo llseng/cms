@@ -9,30 +9,37 @@
 // | Author: lls_woods <1300904522@qq.com>
 // +----------------------------------------------------------------------
 
-namespace app\mch\controller;
+namespace app\mch\logic;
 
-use app\common\logic as logic;
+use app\common\validate as validate;
 
-class Base extends \Cencms\ApiBase
+class Apply
 {
-	
-	//商户信息
-	protected $user;
 
 	//构造函数
 	public function __construct()
 	{
-		//执行父级构造函数
-		parent::__construct();
 		
-		//获取商户信息
-		$this->user = logic\Mch::getLogin();
-		//商户未登录
-		if( !$this->user )
-		{
-			printJSON( self::returnError('未登录',['login'=>'NotLoggedIn']) );
-		}
+		
 		
 	}
-
+	
+	//商户注册信息验证
+	static public function createV(array $data)
+	{
+		//
+		$validate = new validate\Apply();
+		
+		$result = $validate->scene('create')->check($data);
+		
+		if( !$result )
+		{
+			return $validate->getError();
+		}
+		
+		return true;
+		
+	}
+	
+	
 }

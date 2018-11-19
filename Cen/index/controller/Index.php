@@ -7,8 +7,8 @@ class Index
 {
     public function index()
     {
-		$json = \Addons\Taobao\TelAddr::get(18797818194);
-		var_dump($json);
+		var_dump(MODULE,CONTROLLER,ACTION);
+		var_dump(\Request::module());
     }
 
     public function hello($name = 'ThinkPHP5')

@@ -135,7 +135,7 @@ class Mch
 		return $mchData;
 	}
 	
-	//商户推出 (清楚商户SESSION)
+	//商户推出 (清除商户SESSION)
 	static public function loginClose()
 	{
 		Session::clear(self::$sessArea);
@@ -162,6 +162,31 @@ class Mch
 		//返回商户信息
 		return $mchData;
 		
+	}
+	
+	//创建应用
+	static public function createApply(array $data)
+	{
+		//应用数据
+		$applyData = [];
+
+		//所属商户ID
+		$applyData['mch_id'] = $data['mch_id'];
+		
+		//应用名
+		$applyData['name'] = $data['name'];
+		
+		//应用昵称
+		$applyData['nick'] = $data['nick'];
+		
+		//应用介绍
+		$applyData['intro'] = $data['intro'];
+		
+		//应用ID
+		$applyData['id'] = Apply::create($applyData);
+		if( !$applyData ) return false;
+		
+		return $applyData;
 	}
 
 	//构造函数

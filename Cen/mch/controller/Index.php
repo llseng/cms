@@ -19,7 +19,15 @@ class Index extends \Cencms\ApiBase
 	//构造函数
 	public function __construct()
 	{
+		//执行父级构造函数
+		parent::__construct();
 	
+	}
+	
+	//首页
+	public function index()
+	{
+		return json(self::returnError());
 	}
 	
 	//商户注册

@@ -18,6 +18,9 @@ class Apply
 	//数据表名
 	static public $dbName = "apply";
 	
+	//显示字段
+	static public $field = 'id,mch_id,name,nick,intro,create_time,status';
+	
 	//创建应用
 	static public function create(array $data)
 	{
@@ -39,9 +42,9 @@ class Apply
 		//创建时间
 		$insert['create_time'] = NOWTIME;
 		
-		$result = Db::name(self::$dbName)->insert($insert);
+		$result = Db::name(self::$dbName)->insertGetId($insert);
 		
-		return $return ?: false;
+		return $result ?: false;
 		
 	}
 	
@@ -56,6 +59,41 @@ class Apply
 		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->find();
 		
 		return $result ?: false;
+	}
+	
+	//获取应用列表
+	static public function getAppleList(array $where, $order = "create_time desc", $start = 0, $num = 20)
+	{
+		
+        //可用条件
+        $yes_where = ['id','mch_id','name','nick','status','create_time'];
+
+        //列表显示字段
+        $list_field = ['id', 'mch_id', 'name', 'nick', 'intro', 'create_time', 'status' ];
+        //foreach($list_field as $key => &$val){$val = 'o.'.$val;}
+        
+        //显示字段
+        $field_str = join(",",$list_field);
+        //搜索条件
+        $where_arr = [];
+
+        //获取可用条件
+        if( $where )
+        {
+            foreach( $where as $key => $val )
+            {
+				//跳过不可用条件
+                if( !in_array($val[0],$yes_where) ) continue;
+                //$val[0] = 'o.'.$val[0];
+                $where_arr[] = $val;
+            }
+        }
+		
+		//获取
+		$result = Db::name(self::$dbName)->field($list_field)->where($where)->order($order)->limit($start,$num)->select();
+		
+		return $result ?: false;
+		
 	}
 	
 	//构造函数

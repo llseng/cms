@@ -1,12 +1,27 @@
 <?php
 namespace Cencms;
 
+use \Request;
+
 class ApiBase
 {
 
 	//构造函数
 	public function __construct()
 	{
+		//请求模块
+		!defined("MODULE_NAME") && define("MODULE_NAME",Request::module());
+		
+		//请求控制器
+		!defined("CONTROLLER_NAME") && define("CONTROLLER_NAME",Request::controller());
+		
+		//请求方法
+		!defined("ACTION_NAME") && define("ACTION_NAME",Request::action());
+		
+		//请求方式
+		!defined("METHOD") && define("METHOD",Request::method());
+		
+		if( CONTROLLER_NAME == "Base" ) exit(json_encode(self::returnError()));
 		
 	}
 	
@@ -38,7 +53,7 @@ class ApiBase
 	}
 	
 	//失败返回
-	protected function returnError($msg = 'Flie',$arr = [])
+	protected function returnError($msg = 'Fail',$arr = [])
 	{
 		//基础数据
 		$data = self::returnData(0,$msg);
