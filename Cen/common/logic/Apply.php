@@ -62,7 +62,7 @@ class Apply
 	}
 	
 	//获取应用列表
-	static public function getAppleList(array $where, $order = "create_time desc", $start = 0, $num = 20)
+	static public function getList(array $where, $order = "create_time desc", $start = 0, $num = 20)
 	{
 		
         //可用条件
@@ -94,6 +94,41 @@ class Apply
 		
 		return $result ?: false;
 		
+	}
+	
+	//设置应用信息
+	static public function setApply( $where, $data )
+	{
+		//设置的信息
+		$update = [];
+		//名
+		$data['name'] && $update['name'] = $data['name'];
+		//昵称
+		$data['nick'] && $update['nick'] = $data['nick'];
+		//简介
+		$data['intro'] && $update['intro'] = $data['intro'];
+		//启用状态
+		isset($data['status']) && $update['status'] = $data['status'] ? 1 : 0;
+		//撤销
+		//isset($data['cancel']) && $update['cancel'] = $data['cancel'] ? 1 : 0;
+		
+		$result = Db::name(self::$dbName)->where($where)->update($update);
+		
+		return $return; ?: false;
+	}
+	
+	static public function setApplyById( $id, $data)
+	{
+		$where = 'id='.$id;
+		
+		return self::setApply( $where, $data );
+	}
+	
+	static public function setApplyByName( $name, $data)
+	{
+		$where = 'name='.$name;
+		
+		return self::setApply( $where, $data );
 	}
 	
 	//构造函数
