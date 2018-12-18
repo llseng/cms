@@ -148,6 +148,35 @@ return [
 
 	)ENGINE=MYISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='支付系统基础配置'",
 	
+	//管理员列表
+	'cen_admin' => "create table cen_admin(
+	
+		`id` smallint(5) unsigned not null auto_increment comment '主键',
+		
+		`name` varchar(20) not null comment '管理员名',
+		
+		`nick` varchar(20) not null comment '管理员昵称',
+		
+		`role_id` int(11) unsigned not null comment '角色ID(外键)',
+		
+		`intro` varchar(255) not null comment '管理简介',
+		
+		`create_time` int(11) not null default 0 comment '创建时间',
+		
+		`status` tinyint(1) unsigned not null default 1 comment '启用状态',
+		
+		primary key (`id`),
+		
+		unique key `name`(`name`),
+		
+		key `nick`(`nick`),
+		
+		key `role_id`(`role_id`),
+		
+		key `create_time`(`create_time`)
+	
+	)engine=innodb default charset=utf8 comment='管理员列表'",
+	
 	//商户列表
 	'cen_mch' => "create table cen_mch(
 	
@@ -203,6 +232,8 @@ return [
 		`nick` varchar(20) not null comment '昵称',
 		
 		`intro` varchar(200) not null comment '应用简介',
+		
+		`sign` varchar(32) not null comment '应用秘钥',
 		
 		`status` tinyint(1) unsigned not null default 0 comment '启用状态',
 		
@@ -356,6 +387,58 @@ return [
 		references `cen_phone`(`id`)
 		
 	)engine=innodb default charset=utf8 comment='商户列表'",
+	
+	//接口表
+	'cen_api' => "create table cen_api(
+		
+		`id` smallint(5) unsigned not null auto_increment comment '主键',
+		
+		`name` varchar(20) not null comment '接口名',
+		
+		`nick` varchar(20) not null comment '接口昵称',
+		
+		`intro` varchar(255) not null comment '接口简介',
+		
+		`status` tinyint(1) unsigned not null default 0 comment '开启状态',
+		
+		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
+		
+		primary key (`id`),
+		
+		unique key `name`(`name`),
+		
+		key `nick`(`nick`),
+		
+		key `create_time`(`create_time`)
+		
+	)engine=innodb default charset=utf8 comment='API列表'",
+	
+	//商户接口关联表
+	'cen_mch_api' => "create table cen_mch_api(
+	
+		`id` int(11) unsigned not null auto_increment comment '主键',
+		
+		`mch_id` int(11) unsigned not null comment '商户ID(外键)',
+		
+		`api_id` int(11) unsigned not null comment '接口ID(外键)',
+		
+		`amount` int(11) unsigned not null default 0 comment '使用额度',
+		
+		`status` tinyint(1) unsigned not null default 0 comment '启用状态',
+		
+		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
+		
+		primary key (`id`),
+		
+		unique key `mch_api`(`mch_id`,`api_id`),
+		
+		key `create_time`(`create_time`)
+	
+	)engine=innodb default charset=utf8 comment='商户接口关联表'",
 	
 ];
 

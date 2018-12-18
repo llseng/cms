@@ -28,6 +28,9 @@ class Apply extends Validate
 		//应用简介
 		'intro' => ['require', 'regex' => "/^\S{6,180}$/"],
 		
+		//应用秘钥
+		'sign' => ['require', 'regex' => "/^[0-9a-zA-Z]{32}$/"],
+		
 	];
 	
 	//错误提示
@@ -40,12 +43,19 @@ class Apply extends Validate
 	
 		//应用简介
 		'intro.regex' => '应用简介格式错误,仅支持6~180位非空字符',
+		
+		//应用秘钥
+		'sign.regex' => '应用秘钥格式错误,仅支持英文数字32位',
 	];
 	
 	//验证场景
 	public $scene = [
 		//应用创建
 		'create' => ['name','nick','intro'],
+		//应用修改
+		'set' => ['nick','intro'],
+		//设置秘钥
+		'setApplySign' => ['sign'],
 	];
 	
 	

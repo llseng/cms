@@ -12,6 +12,7 @@
 namespace app\common\logic;
 
 use \Db;
+use \Session;
 use Addons\Aliyun\SmsHelper;
 
 class Sms
@@ -127,6 +128,74 @@ class Sms
 		
 		return true;
 		
+	}
+	
+	//发送短信验证码
+	/**
+	$mark  string
+	$data  array 
+		phone  =>  接受手机号
+		code   =>  发送验证码
+	**/
+	static public function sendPhoneCode($mark, array $data)
+	{
+		
+		//
+		$session = Session::get($mark);
+		//间隔时间
+		if($session && $data['phone'] == $session['phone'] && (NOWTIME - $session['create_time']) < $session['rule_time'] )
+		{
+			return "验证码已发送,请注意查收.(" . ($session['rule_time'] - (NOWTIME - $session['create_time']) ) ."秒后可再次发送验证码.)";
+		}
+		
+		//发送验证码
+		$send = self::send($data['code'],$data['phone']);
+		if( !$send )
+		{
+			return false;
+		}
+		
+		//创建时间
+		$data['create_time'] = NOWTIME;
+		//下次可发送间隔时间 \秒
+		$data['rule_time'] = 120; 
+		//验证码有效时间 \秒
+		$data['eff_time'] = 600; 
+		//保存数据
+		Session::set($mark,$data);
+		
+		return '验证码发送成功,有效期为10分钟';
+		
+	}
+	
+	//验证短信验证码
+	/**
+	$mark  string
+	$data  array 
+		phone  =>  接受手机号
+		code   =>  发送验证码
+	**/
+	static public function verifyPhoneCode($mark, array $data)
+	{
+		$session = Session::get($mark);
+		//session 不存在 短信未发送
+		if( !$session || !$data )
+		{
+			return false;
+		}
+		
+		//间隔时间
+		$gap = (NOWTIME - $session['create_time']);
+		
+		//验证码验证成功
+		if( $data['phone'] == $session['phone'] && $data['code'] == $session['code'] && $gap < $session['eff_time'] )
+		{
+			//验证码只可使用一次
+			Session::delete($mark);
+			return true;
+		}
+		
+		return false;
 	}
 
 	//构造函数

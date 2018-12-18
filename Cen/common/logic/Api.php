@@ -4,7 +4,7 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 念菲网络 (http://www.cencms.com)
 // +----------------------------------------------------------------------
-// | Creation time 2018-11-07
+// | Creation time 2018-12-18
 // +----------------------------------------------------------------------
 // | Author: lls_woods <1300904522@qq.com>
 // +----------------------------------------------------------------------
@@ -13,30 +13,27 @@ namespace app\common\logic;
 
 use \Db;
 
-class Apply
+class Api
 {
 	//数据表名
-	static public $dbName = "apply";
+	static public $dbName = "api";
 	
 	//显示字段
-	static public $field = 'id,mch_id,name,nick,intro,create_time,status';
+	static public $field = "id,name,nick,intro,create_time,status";
 	
-	//创建应用
+	//创建接口
 	static public function create(array $data)
 	{
-		//应用信息
+		//接口信息
 		$insert = [];
 		
-		//商户ID
-		$insert['mch_id'] = $data['mch_id'];
-		
-		//应用名
+		//接口名
 		$insert['name'] = $data['name'];
 		
-		//应用昵称
+		//接口昵称
 		$insert['nick'] = $data['nick'];
 		
-		//应用简介
+		//接口简介
 		$insert['intro'] = $data['intro'];
 		
 		//创建时间
@@ -48,36 +45,15 @@ class Apply
 		
 	}
 	
-	//获取应用信息
-	static public function getApply(array $where)
-	{
-		$where['cancel'] = 0;
-		
-		//获取
-		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->find();
-		
-		return $result ?: false;
-		
-	}
-	
-	static public function getApplyByName($name)
-	{
-		//条件
-		$where = [];
-		$where['name'] = $name;
-		
-		return self::getApply($where);
-	}
-	
-	//获取应用列表
+	//获取接口列表
 	static public function getList(array $where, $order = "create_time desc", $start = 0, $num = 20)
 	{
 		
         //可用条件
-        $yes_where = ['id','mch_id','name','nick','status','create_time'];
+        $yes_where = ['id','name','nick','status','create_time'];
 
         //列表显示字段
-        $list_field = ['id', 'mch_id', 'name', 'nick', 'intro', 'create_time', 'status' ];
+        $list_field = ['id', 'name', 'nick', 'intro', 'create_time', 'status' ];
         //foreach($list_field as $key => &$val){$val = 'o.'.$val;}
         
         //显示字段
@@ -105,65 +81,85 @@ class Apply
 		
 	}
 	
-	//设置应用信息
-	static public function setApply(array $where,array $data )
+	//获取接口信息
+	static public function getApi(array $where)
 	{
-		//设置的信息
+		//条件
+		$where['cancel'] = 0;
+		
+		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->find();
+		
+		return $return ?: false;
+		
+	}
+	
+	static public function getApiById($id)
+	{
+		//条件
+		$where = [];
+		$where['id'] = $id;
+		
+		return self::getApi($where);
+		
+	}
+	
+	static public function getApiByName($name)
+	{
+		//条件
+		$where = [];
+		$where['name'] = $name;
+		
+		return self::getApi($where);
+		
+	}
+	
+	//设置接口信息
+	static public function setApi(array $where, $data)
+	{
+		//信息
 		$update = [];
-		//名
-		//$data['name'] && $update['name'] = $data['name'];
-		//昵称
-		$data['nick'] && $update['nick'] = $data['nick'];
-		//简介
-		$data['intro'] && $update['intro'] = $data['intro'];
+		
+		//接口昵称
+		$update['nick'] = $data['nick'];
+		
+		//接口简介
+		$update['intro'] = $data['intro'];
+		
 		//启用状态
 		isset($data['status']) && $update['status'] = $data['status'] ? 1 : 0;
-		//撤销
-		//isset($data['cancel']) && $update['cancel'] = $data['cancel'] ? 1 : 0;
+		
+		//条件
+		$where['cancel'] = 0;
 		
 		$result = Db::name(self::$dbName)->where($where)->update($update);
 		
 		return $result ?: false;
 	}
 	
-	static public function setApplyById( $id, $data)
-	{
-		$where = ['id' => $id];
-		
-		return self::setApply( $where, $data );
-	}
-	
-	static public function setApplyByName( $name, $data)
-	{
-		$where = ['name' => $name];
-		
-		return self::setApply( $where, $data );
-	}
-	
-	//设置应用秘钥
-	static public function setApplySign(array $where, array $data)
-	{
-		
-		$result = Db::name(self::$dbName)->where($where)->update($data);
-		
-		return $result ?: false;
-	}
-	
-	static public function setApplySignById($id, array $data)
+	static public function setApiById($id, $data)
 	{
 		//条件
 		$where = [
 			'id' => $id,
 		];
 		
-		return self::setApplySign($where, $data);
+		return self::getApi( $where, $data );
 	}
 	
+	static public function setApiByName( $name, $data )
+	{
+		//条件
+		$where = [
+			'name' => $name,
+		];
+		
+		return self::getApi( $where, $data );
+	}
+
 	//构造函数
 	public function __construct()
 	{
 	
 	}
-	
 
 }
