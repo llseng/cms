@@ -157,13 +157,29 @@ return [
 		
 		`nick` varchar(20) not null comment '管理员昵称',
 		
-		`role_id` int(11) unsigned not null comment '角色ID(外键)',
+		`pass` varchar(32) not null comment '管理员密码',
+		
+		`role_id` int(11) unsigned not null default 0 comment '角色ID(外键)',
 		
 		`intro` varchar(255) not null comment '管理简介',
 		
+		`phone` varchar(12) not null comment '手机号',
+		
+		`email` varchar(32) not null comment '邮箱',
+		
 		`create_time` int(11) not null default 0 comment '创建时间',
 		
+		`update_time` int(11) not null default 0 comment '修改时间',
+		
+		`create_ip` varchar(20) not null default '' comment '创建ip',
+		
+		`last_ip` varchar(20) comment '最后登录IP',
+		
+		`last_time` int(11) unsigned not null default 0 comment '最后登录时间',
+		
 		`status` tinyint(1) unsigned not null default 1 comment '启用状态',
+		
+		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
 		
 		primary key (`id`),
 		
@@ -402,6 +418,8 @@ return [
 		`status` tinyint(1) unsigned not null default 0 comment '开启状态',
 		
 		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`update_time` int(11) unsigned not null default 0 comment '修改时间',
 		
 		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
 		

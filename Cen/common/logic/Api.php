@@ -84,12 +84,10 @@ class Api
 	//获取接口信息
 	static public function getApi(array $where)
 	{
-		//条件
-		$where['cancel'] = 0;
 		
-		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->find();
+		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->where('cancel',0)->find();
 		
-		return $return ?: false;
+		return $result ?: false;
 		
 	}
 	
@@ -120,18 +118,18 @@ class Api
 		$update = [];
 		
 		//接口昵称
-		$update['nick'] = $data['nick'];
+		isset($data['nick']) && $update['nick'] = $data['nick'];
 		
 		//接口简介
-		$update['intro'] = $data['intro'];
+		isset($data['intro']) && $update['intro'] = $data['intro'];
 		
 		//启用状态
 		isset($data['status']) && $update['status'] = $data['status'] ? 1 : 0;
 		
-		//条件
-		$where['cancel'] = 0;
+		//修改时间
+		$update['update_time'] = NOWTIME;
 		
-		$result = Db::name(self::$dbName)->where($where)->update($update);
+		$result = Db::name(self::$dbName)->where($where)->where('cancel',0)->update($update);
 		
 		return $result ?: false;
 	}
@@ -143,7 +141,7 @@ class Api
 			'id' => $id,
 		];
 		
-		return self::getApi( $where, $data );
+		return self::setApi( $where, $data );
 	}
 	
 	static public function setApiByName( $name, $data )
@@ -153,7 +151,7 @@ class Api
 			'name' => $name,
 		];
 		
-		return self::getApi( $where, $data );
+		return self::setApi( $where, $data );
 	}
 
 	//构造函数

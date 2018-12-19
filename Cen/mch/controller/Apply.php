@@ -59,7 +59,7 @@ class Apply extends Base
 			return json(self::returnError("创建失败"));
 		}
 		
-		return json(self::returnSuccess($applyData,'创建成功'));
+		return json(self::returnSuccess(['data'=>$applyData],'创建成功'));
 	}
 	
 	public function getList()
@@ -103,13 +103,13 @@ class Apply extends Base
 		$id = (int)input('id');
 		
 		//应用ID验证
-		$result = logics\Apply::isMchApply($id, $this->user['mch_id']);
-		if( !($id && $result) ) 
+		//$result = logics\Apply::isMchApply($id, $this->user['mch_id']);
+		if( !($id && $result = logics\Apply::isMchApply($id, $this->user['mch_id'])) ) 
 		{
 			return json(self::returnError('操作异常,应用不存在'));
 		}
 		
-		return json(self::returnSuccess($result,'操作成功'));
+		return json(self::returnSuccess(['data' => $result],'操作成功'));
 		
 	}
 	
@@ -120,8 +120,8 @@ class Apply extends Base
 		$id = (int)input('id');
 		
 		//应用ID验证
-		$result = logics\Apply::isMchApply($id, $this->user['mch_id']);
-		if( !($id && $result) ) 
+		$result = $id && logics\Apply::isMchApply($id, $this->user['mch_id']);
+		if( !$result ) 
 		{
 			return json(self::returnError('操作异常,应用不存在'));
 		}
@@ -161,29 +161,29 @@ class Apply extends Base
 		//应用ID
 		$id = (int)input('id');
 		
-		//验证手机验证码
-		if( !$this->setApplySignPhoneCodeVerify($id, $post['code']) )
-		{
-			return json(self::returnError('短信验证码错误'));
-		}
-		
-		//应用ID验证
-		$result = logics\Apply::isMchApply($id, $this->user['mch_id']);
-		if( !($id && $result) ) 
-		{
-			return json(self::returnError('操作异常,应用不存在'));
-		}
-		
 		//数据
 		$data = [
 			'sign' => $post['sign'],
 		];
 		
-		//数据验证
+		//1.数据验证
 		$result = logics\Apply::setApplySignV($data);
 		if( $result !== true )
 		{
 			return json(self::returnError($result));
+		}
+		
+		//2.验证手机验证码
+		if( !$this->setApplySignPhoneCodeVerify($id, $post['code']) )
+		{
+			return json(self::returnError('短信验证码错误'));
+		}
+		
+		//3.应用ID验证
+		$result = $id && logics\Apply::isMchApply($id, $this->user['mch_id']);
+		if( !$result ) 
+		{
+			return json(self::returnError('操作异常,应用不存在'));
 		}
 		
 		//设置应用秘钥

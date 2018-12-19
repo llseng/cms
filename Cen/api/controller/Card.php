@@ -50,7 +50,7 @@ class Card extends \Cencms\ApiBase
 			return json(self::returnError($auth['msg'] ?: '实名认证不通过',$data));
 		}
 		
-		return json(self::returnSuccess($auth,'实名认证通过'));
+		return json(self::returnSuccess(['data'=>$auth],'实名认证通过'));
 	}
 	
 	//测试

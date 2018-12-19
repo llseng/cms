@@ -4,41 +4,43 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 念菲网络 (http://www.cencms.com)
 // +----------------------------------------------------------------------
-// | Creation time 2018-12-18
+// | Creation time 2018-12-19
 // +----------------------------------------------------------------------
 // | Author: lls_woods <1300904522@qq.com>
 // +----------------------------------------------------------------------
 
-namespace app\admin\controller;
+namespace app\admin\logic;
 
-use app\admin\logic as logics;
 use app\common\logic as logic;
+use app\common\validate as validate;
 
-class Base extends \Cencms\ApiBase
+class Admin extends logic\Admin
 {
-	//管理对象
-	protected $admin;
+	
+	//验证登录数据
+	static public function loginV(array $data)
+	{
+		//
+		$validate = new validate\Admin();
+		
+		$result = $validate->scene('login')->check($data);
+		
+		if( !$result )
+		{
+			return $validate->getError();
+		}
+		
+		return true;
+
+	}
 
 	//构造函数
 	public function __construct()
 	{
 		//执行父级构造函数
 		parent::__construct();
-		
-		//设置管理对象
-		$this->admin = new logics\Admin();
-		
-		//未登录
-		if( empty($this->admin->getData()) )
-		{
-			
-			printJSON(self::returnError('未登录,请先登录'));
-			
-		}
-		
-		
+	
 	}
-	
-	
 
+	
 }
