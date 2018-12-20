@@ -458,6 +458,65 @@ return [
 	
 	)engine=innodb default charset=utf8 comment='商户接口关联表'",
 	
+	//商户API白名单
+	'cen_mch_api_white' => "create table cen_mch_api_white(
+	
+		`id` int(11) unsigned not null auto_increment comment '主键',
+		
+		`mch_id` int(11) unsigned not null comment '商户ID(外键)',
+		
+		`api_id` int(11) unsigned not null comment '接口ID(外键)',
+		
+		`ip` varchar(20) not null default '' comment 'ip白名单',
+		
+		`status` tinyint(1) unsigned not null default 0 comment '启用状态',
+		
+		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
+		
+		primary key (`id`),
+		
+		key `mch_id`(`mch_id`),
+		
+		key `api_id`(`api_id`),
+		
+		key `create_time`(`create_time`)
+	
+	)engine=innodb default charset=utf8 comment='商户API白名单'",
+	
+	//API请求记录
+	'cen_api_log' => "create table cen_api_log(
+	
+		`id` int(11) unsigned not null auto_increment comment '主键',
+		
+		`mch_id` int(11) unsigned not null comment '商户ID(外键)',
+		
+		`api_id` int(11) unsigned not null comment '接口ID(外键)',
+		
+		`apply_id` int(11) unsigned not null comment '应用ID',
+		
+		`ip` varchar(20) not null default '' comment '请求ip',
+		
+		`data` int(11) unsigned not null default 0 comment '请求数据',
+		
+		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
+		
+		primary key (`id`),
+		
+		key `mch_id`(`mch_id`),
+		
+		key `api_id`(`api_id`),
+		
+		key `ip`(`ip`),
+		
+		key `create_time`(`create_time`)
+	
+	)engine=innodb default charset=utf8 comment='API请求记录'",
+	
+	
 ];
 
 ?>
