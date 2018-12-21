@@ -444,9 +444,13 @@ return [
 		
 		`amount` int(11) unsigned not null default 0 comment '使用额度',
 		
+		`sign` varchar(32) not null default '' comment '应用秘钥',
+		
 		`status` tinyint(1) unsigned not null default 0 comment '启用状态',
 		
 		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`update_time` int(11) unsigned not null default 0 comment '修改时间',
 		
 		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
 		
@@ -456,7 +460,7 @@ return [
 		
 		key `create_time`(`create_time`)
 	
-	)engine=innodb default charset=utf8 comment='商户接口关联表'",
+	)engine=innodb auto_increment=1000 default charset=utf8 comment='商户接口关联表'",
 	
 	//商户API白名单
 	'cen_mch_api_white' => "create table cen_mch_api_white(

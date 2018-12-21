@@ -174,7 +174,7 @@ class Apply extends Base
 		}
 		
 		//2.验证手机验证码
-		if( !$this->setApplySignPhoneCodeVerify($id, $post['code']) )
+		if( !$id || !$this->setApplySignPhoneCodeVerify($id, $post['code']) )
 		{
 			return json(self::returnError('短信验证码错误'));
 		}
