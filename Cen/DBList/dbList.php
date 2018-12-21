@@ -125,6 +125,33 @@ return [
 	)ENGINE=innodb default charset=utf8 comment='实名认证信息表'",
 	*/
 	
+	//测试表
+	"cen_test" => "CREATE TABLE cen_test(
+		
+		`id` int(11) unsigned not null auto_increment,
+
+		`name` varchar(50) not null comment '名',
+		
+		`nick` varchar(20) not null comment '昵称',
+		
+		`create_time` int(11) not null default 0 comment '创建时间',
+		
+		`update_time` int(11) not null default 0 comment '修改时间',
+		
+		`status` tinyint(1) unsigned not null default 0 comment '启用状态',
+		
+		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
+		
+		primary key (`id`),
+		
+		unique key `name`(`name`),
+		
+		key `nick`(`nick`),
+		
+		key `create_time`(`create_time`)
+		
+	)engine=innodb default charset=utf8 comment='测试表'",
+	
 	//系统基础配置
 	"cen_config" => "CREATE TABLE cen_config(
 
@@ -463,7 +490,7 @@ return [
 	)engine=innodb auto_increment=1000 default charset=utf8 comment='商户接口关联表'",
 	
 	//商户API白名单
-	'cen_mch_api_white' => "create table cen_mch_api_white(
+	'cen_mch_api_ipwhite' => "create table cen_mch_api_ipwhite(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键',
 		
@@ -471,11 +498,15 @@ return [
 		
 		`api_id` int(11) unsigned not null comment '接口ID(外键)',
 		
+		`mch_api_id` int(11) unsigned not null comment '商户APIID(外键)',
+		
 		`ip` varchar(20) not null default '' comment 'ip白名单',
 		
 		`status` tinyint(1) unsigned not null default 0 comment '启用状态',
 		
 		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`update_time` int(11) unsigned not null default 0 comment '修改时间',
 		
 		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
 		
@@ -484,6 +515,8 @@ return [
 		key `mch_id`(`mch_id`),
 		
 		key `api_id`(`api_id`),
+		
+		key `mch_api_id`(`mch_api_id`),
 		
 		key `create_time`(`create_time`)
 	
@@ -497,6 +530,8 @@ return [
 		`mch_id` int(11) unsigned not null comment '商户ID(外键)',
 		
 		`api_id` int(11) unsigned not null comment '接口ID(外键)',
+		
+		`mch_api_id` int(11) unsigned not null comment '商户APIID(外键)',
 		
 		`apply_id` int(11) unsigned not null comment '应用ID',
 		
@@ -513,6 +548,8 @@ return [
 		key `mch_id`(`mch_id`),
 		
 		key `api_id`(`api_id`),
+		
+		key `mch_api_id`(`mch_api_id`),
 		
 		key `ip`(`ip`),
 		

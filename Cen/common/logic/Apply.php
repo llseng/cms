@@ -99,7 +99,7 @@ class Apply
         }
 		
 		//获取
-		$result = Db::name(self::$dbName)->field($list_field)->where($where)->order($order)->limit($start,$num)->select();
+		$result = Db::name(self::$dbName)->field($list_field)->where($where_arr)->order($order)->limit($start,$num)->select();
 		
 		return $result ?: false;
 		

@@ -326,4 +326,6 @@ class Api extends Base
 		return $result;
 	}
 	
+	//获取APIIP白名单
+	//public function get
 }

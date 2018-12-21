@@ -1,4 +1,13 @@
 <?php
+// +----------------------------------------------------------------------
+// | LLS_WOODS [ Constantly improve yourself ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 念菲网络 (http://www.cencms.com)
+// +----------------------------------------------------------------------
+// | Creation time 2018-12-21
+// +----------------------------------------------------------------------
+// | Author: lls_woods <1300904522@qq.com>
+// +----------------------------------------------------------------------
 
 namespace app\common\logic;
 
@@ -72,7 +81,7 @@ class MchApi
         }
 		
 		//获取
-		$result = Db::name(self::$dbName . " as " . $dbAlias)->field($field_str)->join($joinDb,$joinWhere)->where($where)->order($order)->limit($start,$num)->select();
+		$result = Db::name(self::$dbName . " as " . $dbAlias)->field($field_str)->join($joinDb,$joinWhere)->where($where_arr)->order($order)->limit($start,$num)->select();
 		
 		return $result ?: false;
 		
@@ -178,6 +187,7 @@ class MchApi
 		
 		$update = [
 			'sign' => $data['sign'],
+			'update' => NOWTIME,
 		];
 		
 		return self::set($where,$update);
