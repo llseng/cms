@@ -66,8 +66,7 @@ class MchApi
         $field_str = join(",",$list_field) . ',' . $joinField;
         //搜索条件
         $where_arr = [];
-		$where_arr[] = ['cancel','=',0];
-
+		
         //获取可用条件
         if( $where )
         {
@@ -81,7 +80,7 @@ class MchApi
         }
 		
 		//获取
-		$result = Db::name(self::$dbName . " as " . $dbAlias)->field($field_str)->join($joinDb,$joinWhere)->where($where_arr)->order($order)->limit($start,$num)->select();
+		$result = Db::name(self::$dbName . " as " . $dbAlias)->field($field_str)->join($joinDb,$joinWhere)->where($where_arr)->where($dbAlias.'.cancel',0)->order($order)->limit($start,$num)->select();
 		
 		return $result ?: false;
 		
@@ -111,6 +110,16 @@ class MchApi
 		//
 		$where = [];
 		$where['api_id'] = $api_id;
+		$where['mch_id'] = $mch_id;
+		
+		return self::get($where);
+	}
+	
+	static public function getMchApiById($id, $mch_id)
+	{
+		//
+		$where = [];
+		$where['id'] = $id;
 		$where['mch_id'] = $mch_id;
 		
 		return self::get($where);

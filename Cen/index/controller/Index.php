@@ -8,12 +8,8 @@ class Index extends \think\Controller
 	
     public function index()
     {
-		$methods = get_class_methods('\app\common\controller\getList');
-		var_dump($methods);
-		var_dump(MODULE,CONTROLLER,ACTION);
-		var_dump(\Request::module());
 		
-		return $this->fetch();
+		dump(logic\MchApiIpwhite::mchApiIpwhiteOpenCount([]));
 		
     }
 

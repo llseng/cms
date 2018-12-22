@@ -23,6 +23,9 @@ class MchApi extends Validate
 		//API秘钥
 		'sign' => ['require', 'regex' => "/^[0-9a-zA-Z]{32}$/"],
 		
+		//ip
+		'ip' => ['require', 'ip'],
+		
 	];
 	
 	//错误提示
@@ -30,12 +33,19 @@ class MchApi extends Validate
 		
 		//应用秘钥
 		'sign.regex' => 'API秘钥格式错误,仅支持英文数字32位',
+		
+		//白名单ip
+		'ip.ip' => 'ip格式错误,不是有效IP地址',
 	];
 	
 	//验证场景
 	public $scene = [
 		//设置秘钥
 		'setSign' => ['sign'],
+		//创建API  ip白名单
+		'createApiIpwhite' => ['ip'],
+		//设置API  ip白名单
+		'setApiIpwhite' => ['ip'],
 	];
 	
 	/*

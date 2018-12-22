@@ -15,6 +15,8 @@ namespace app\common\logic;
 考虑到logic类许多方法一样 , 所以创建各基础类 . 方便之后创建的类公用
 **/
 
+use \Db;
+
 class Base
 {
 
@@ -39,9 +41,9 @@ class Base
 			return static::$dbField;
 		}
 		
-		$dbField = explode(',',static::$dbField);
+		$field = explode(',',static::$dbField);
 		
-		return $dbField;
+		return $field;
 	}
 	
 	//获取字段可用条件
@@ -53,9 +55,9 @@ class Base
 			return static::$dbField;
 		}
 		
-		$dbWhere = explode(',',static::$dbField);
+		$where = explode(',',static::$dbField);
 		
-		return $dbWhere;
+		return $where;
 	}
 	
 	//插入数据
@@ -65,8 +67,10 @@ class Base
 		//插入时间
 		$data['create_time'] = NOWTIME;
 		
+		isset( $data['status'] ) && $data['status'] = $data['status'] ? 1: 0;
+		
 		//插入数据库
-		$result = Db::name(static::dbName())->insert($data);
+		$result = Db::name(static::dbName())->insertGetId($data);
 		
 		return $result ?: false;
 	

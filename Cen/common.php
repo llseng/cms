@@ -184,3 +184,10 @@ function is_phone($phone)
 	return $result;
 }
 
+//是否是IP
+function is_ip($ip)
+{
+	$result = filter_var($ip,FILTER_VALIDATE_IP) === false;
+	
+	return $result;
+}

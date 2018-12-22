@@ -104,23 +104,23 @@ class Api extends Base
 	public function create()
 	{
 		//
-		$id = (int)input('id');
+		$apiId = (int)input('id');
 		
 		//api是否存在
-		if( !( $id && $apiDat = logic\Api::getApiById($id) ) )
+		if( !( $apiId && $apiDat = logic\Api::getApiById($apiId) ) )
 		{
 			return json(self::returnError('操作异常,API不存在'));
 		}
 		
 		//是否已创建
-		$mch_api = logic\MchApi::getMchApi($id, $this->user['mch_id']);
+		$mch_api = logic\MchApi::getMchApi($apiId, $this->user['mch_id']);
 		if( $mch_api )
 		{
 			return json(self::returnError('API已创建'));
 		}
 		
 		//创建
-		$res = logic\MchApi::create($id, $this->user['mch_id']);
+		$res = logic\MchApi::create($apiId, $this->user['mch_id']);
 		if( !$res )
 		{
 			return json(self::returnError('操作失败'));
@@ -326,6 +326,193 @@ class Api extends Base
 		return $result;
 	}
 	
-	//获取APIIP白名单
-	//public function get
+	/** API  IP 白名单 **/
+	
+	//添加IP白名单
+	public function createApiIpwhite()
+	{
+		//商户API ID
+		$mchApiId = input('id/d');
+		
+		$post = input('post.');
+		
+		//数据
+		$data = [
+			'ip' => $post['ip'],
+		];
+		
+		//数据验证
+		$result = logics\Api::createApiIpwhiteV($data);
+		if( $result !== true ) 
+		{
+			return json(self::returnError($result));
+		}
+		
+		//商户API ID 验证
+		if( !($mchApiId && $mchApiData = logic\MchApi::getMchApiById($mchApiId, $this->user['mch_id']) ) )
+		{
+			return json(self::returnError('操作异常,API不存在'));
+		}
+		
+		//是否已设置
+		$result = logic\MchApiIpwhite::getMchApiIpwhiteByIp($data['ip'], $mchApiId);
+		if( $result )
+		{
+			return json(self::returnError('IP白名单已设置'));
+		}
+		
+		$data['mch_id'] = $mchApiData['mch_id'];
+		$data['api_id'] = $mchApiData['api_id'];
+		$data['mch_api_id'] = $mchApiId;
+		
+		//创建
+		$res = logic\MchApiIpwhite::create($data);
+		if( !$res )
+		{
+			return json(self::returnError('操作失败'));
+		}
+		
+		return json(self::returnSuccess(['id'=>$res],'操作成功'));
+		
+	}
+	
+	//获取APIIP白名单列表
+	public function getIpwhiteList()
+	{
+		//
+		$mchApiId = input('id/d');
+		$post = input('post.');
+		
+		//排序
+		$order = 'create_time desc';
+		
+		//开始位置
+		$pageStart = 0;
+
+		//列表条数
+		$pageNum = 20;
+		
+		//查询条件
+		$whereArr = [];
+		$whereArr[] = ['mch_id','=',$this->user['mch_id']];
+		
+		//mchApiId 是商户的API ID   只获取mchApiId API 的ip的白名单 
+		if( $mchApiId && $result = logic\MchApi::getMchApiById($mchApiId, $this->user['mch_id']) )
+		{
+			$whereArr[] = ['mch_api_id','=',$mchApiId];
+		}			
+		
+		//自定义条件
+		if( $post )
+		{
+			//列表条数
+			if( $post['pageNum'] ) $pageNum = (int)$post['pageNum'];
+			//页码
+			if( $post['page'] )	$pageStart = ((int)$post['page'] - 1) * $pageNum;
+			//
+			if( $post['ip'] ) 
+			{
+				//MYSql 模糊查询防注入  $cond = addcslashes($cond,"%_");
+				$whereArr[] = ['ip','like','%'.addcslashes($post['ip'],"%_").'%'];
+			}
+		}
+		
+		//获取记录
+		$List = logic\MchApiIpwhite::getList($whereArr, $order, $pageStart, $pageNum);
+		
+		return json(self::returnSuccess(['list'=>$List],'获取成功'));
+		
+	}
+	
+	//设置API IP白名单
+	public function setApiIpwhite()
+	{
+		//白名单记录ID
+		$id = input('id/d');
+		
+		$post = input('post.');
+		
+		$data = [
+			'ip' => $post['ip'],
+		];
+		
+		//白名单记录ID 验证
+		if( !( $id && $mchApiIpwhiteData = logic\MchApiIpwhite::getMchApiIpwhiteById($id, $this->user['mch_id'])) )
+		{
+			return json(self::returnError('操作异常,IP白名单不存在'));
+		}
+		
+		//数据验证
+		$result = logics\Api::setApiIpwhiteV($id, $mchApiIpwhiteData['mch_api_id'], $data);
+		if( $result !== true )
+		{
+			return json(self::returnError($result));
+		}
+		
+		//设置
+		$res = logic\MchApiIpwhite::setById($id, $data);
+		if( !$res )
+		{
+			return json(self::returnError('操作失败'));
+		}
+		
+		return json(self::returnSuccess([],'操作成功'));
+		
+	}
+	
+	//启用|关闭 IP白名单
+	public function serApiIpwhiteStatus()
+	{
+		//
+		//白名单记录ID
+		$id = input('id/d');
+		
+		//白名单记录ID 验证
+		if( !( $id && $mchApiIpwhiteData = logic\MchApiIpwhite::getMchApiIpwhiteById($id, $this->user['mch_id'])) )
+		{
+			return json(self::returnError('操作异常,IP白名单不存在'));
+		}
+		
+		//当前 启用状态
+		$status = $mchApiIpwhiteData['status'];
+		
+		//设置后启用状态
+		$updateStatus = $status ? 0: 1;
+		
+		//启用时查看是否超过 启用限制条数
+		if( $updateStatus )
+		{
+			//当前 商户API 启用条数
+			$mchApiIpwhiteOpenCount = logic\MchApiIpwhite::mchApiIpwhiteOpenCountByMchApiId($mchApiIpwhiteData['mch_api_id']);
+			
+			//启用限制条数
+			$mchApiIpwhiteOpenLimit = logic\MchApiIpwhite::mchApiIpwhiteOpenLimit();
+			
+			// 是否 大于|等于 开启限制数
+			if( $mchApiIpwhiteOpenCount >= $mchApiIpwhiteOpenLimit )
+			{
+				return json(self::returnError("API IP白名单超过了限制 ({$mchApiIpwhiteOpenLimit}条)")); 
+			}
+			
+		}
+		
+		//
+		$data = [
+			'status'=>$updateStatus,
+		];
+		
+		//
+		$statusName = $updateStatus ? '启用': '关闭';
+		
+		//
+		$res = logic\MchApiIpwhite::setById($id, $data);
+		if( !$res )
+		{
+			return json(self::returnError( $statusName .'失败'));
+		}
+		
+		return json(self::returnSuccess([], $statusName .'成功'));
+		
+	}
+	
 }

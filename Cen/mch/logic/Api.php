@@ -61,6 +61,49 @@ class Api
 		
 		return true;
 	}
+
+	//
+	static public function createApiIpwhiteV(array $data)
+	{
+		$validate = new validate\MchApi();
+		
+		$result = $validate->scene('createApiIpwhite')->check($data);
+		
+		if( !$result )
+		{
+			return $validate->getError();
+		}
+		
+		return true;
+	}
+
+	//
+	static public function setApiIpwhiteV($id, $mch_api_id,array $data)
+	{
+		$validate = new validate\MchApi();
+		
+		$result = $validate->scene('setApiIpwhite')->check($data);
+		
+		if( !$result )
+		{
+			return $validate->getError();
+		}
+		
+		//重复IP验证
+		$where = [
+			['id', 'not in', $id],
+			['mch_api_id', '=', $mch_api_id],
+			['ip', '=', $data['ip']],
+		];
+		$res = logic\MchApiIpwhite::get($where);
+		if( $res )
+		{
+			return "IP {$data['ip']} 已存在,请换一个";
+		}
+		
+		return true;
+	}
 	
+	//
 
 }

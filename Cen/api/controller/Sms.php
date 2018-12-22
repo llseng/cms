@@ -13,12 +13,14 @@ namespace app\api\controller;
 use app\api\logic as logics;
 use app\common\logic as logic;
 
-class Sms extends \Cencms\ApiBase
+class Sms extends Base//\Cencms\ApiBase
 {
 	//构造函数
 	public function __construct()
 	{
-	
+		//父级构造函数
+		parent::__construct();
+		
 	}
 
 	//发送验证短信(单条)
@@ -38,6 +40,7 @@ class Sms extends \Cencms\ApiBase
 			return json(self::returnError($result));
 		}
 		
+		//短信发送
 		$send = logic\Sms::send($data['code'],$data['phone']);
 		
 		if( !$send ) 
