@@ -42,7 +42,7 @@ class Index extends \Cencms\ApiBase
 
 		if( !$this->verifyLoginCaptcha($code) )
 		{
-			//return json(self::returnError('验证码错误'));
+			return json(self::returnError('验证码错误'));
 		}
 		//
 		$post = input('post.');

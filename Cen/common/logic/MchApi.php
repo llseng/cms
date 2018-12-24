@@ -20,7 +20,7 @@ class MchApi
 	static public $dbName = 'mch_api';
 	
 	//显示字段
-	static public $field = 'mch_id,api_id,amount,static,create_time';
+	static public $field = 'mch_id,api_id,amount,status,create_time';
 	
 	//创建商户API
 	static public function create($id, $mch_id)
@@ -90,7 +90,7 @@ class MchApi
 	static public function get(array $where)
 	{
 		//
-		$result = Db::name(self::$dbName)->where($where)->where('cancel',0)->find();
+		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->where('cancel',0)->find();
 		
 		return $result ?: false;
 	}
@@ -165,7 +165,7 @@ class MchApi
 		//isset($data['amount']) && $update['amount'] = (int)$data['amount'];
 		
 		//启用状态
-		isset($data['status']) && $update['status'] = (int)$data['status'];
+		isset($data['status']) && $update['status'] = $data['status'] ? 1 : 0;
 		
 		//秘钥
 		isset($data['sign']) && $update['sign'] = $data['sign'];

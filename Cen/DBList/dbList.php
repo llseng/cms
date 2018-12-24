@@ -537,9 +537,11 @@ return [
 		
 		`ip` varchar(20) not null default '' comment '请求ip',
 		
-		`data` int(11) unsigned not null default 0 comment '请求数据',
+		`data` varchar(1000) unsigned not null default 0 comment '请求数据',
 		
 		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间[数据创建时自动写入创建时间]',
 		
 		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
 		

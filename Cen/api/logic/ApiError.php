@@ -4,39 +4,36 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 念菲网络 (http://www.cencms.com)
 // +----------------------------------------------------------------------
-// | Creation time 2018-12-22
+// | Creation time 2018-12-24
 // +----------------------------------------------------------------------
 // | Author: lls_woods <1300904522@qq.com>
 // +----------------------------------------------------------------------
 
 namespace app\api\logic;
 
-use app\api\validate as validates;
-use app\common\validate as validate;
+use app\common\logic as logic;
 
-class Base
+class ApiError extends logic\Error
 {
-	//构造函数
+	//
 	public function __construct()
 	{
-		
+		parent::__construct();
 	
+		$this->add([
+			//商户API不存在
+			'ERROR_MCHAPI_NOT_EXIST' => 'API_ID错误',
+			//商户API 秘钥错误
+			'ERROR_MCHAPI_SIGN_ERROR' => 'API秘钥错误',
+			//商户API 类型错误
+			'ERROR_MCHAPI_APITYPE_ERROR' => 'API类型错误',
+			//商户API未开启
+			'ERROR_MCHAPI_NOT_OPEN' => 'API未开启',
+			//API服务未开启
+			'ERROR_API_NOT_OPEN' => 'API服务暂时关闭',
+			//API服务不存在
+			'ERROR_API_NOT_EXIST' => '无API服务',
+		]);
 	}
 	
-	//认证请求数据验证
-	static public function requestV(array $data)
-	{
-		$validate = new validate\ApiRequest();
-
-		$result = $validate->scene('request')->check($data);
-		
-		if( !$result )
-		{
-			return $validate->getError();
-		}
-		
-		return true;
-	}
-	
-
 }

@@ -15,7 +15,7 @@ use \Db;
 use app\api\logic as logics;
 use app\common\logic as logic;
 
-class Card extends Base//\Cencms\ApiBase
+class Card extends Base
 {
 
 	//构造函数

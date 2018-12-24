@@ -66,6 +66,24 @@ class MchApiIpwhite extends Base
 		
 	}
 	
+	static public function getOpenList(array $where)
+	{
+		//
+		$result = Db::name(static::dbName())->field(static::dbField())->where($where)->where(["status"=>1,"cancel"=>0])->select();
+		
+		return $result ?: false;
+	}
+	
+	//商户API 开启IP白名单列表
+	static public function getMchApiIpwhiteOpenList($mch_api_id)
+	{
+		$where = [
+			'mch_api_id' => $mch_api_id,
+		];
+		
+		return static::getOpenList($where);
+	}
+	
 	//===
 	
 	//是否已设置IP白名单

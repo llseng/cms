@@ -138,7 +138,7 @@ class Api extends Base
 		
 		//1.是否存在
 		//$result = logic\Api::getApiById($id);
-		if( !($id && $result = logic\MchApi::getMchApi($id, $this->user['mch_id']) ) ) 
+		if( !($id && $result = logic\MchApi::getMchApiById($id, $this->user['mch_id']) ) ) 
 		{
 			return json(self::returnError('操作异常,API不存在'));
 		}
@@ -150,7 +150,7 @@ class Api extends Base
 		$status = $result['status'] ? '关闭' : '开启';
 		
 		//设置
-		$res = logic\Api::setApiById($id, $data);
+		$res = logic\MchApi::setById($id, $data);
 		if( !$res )
 		{
 			return json(self::returnError( $status . '失败' ));
