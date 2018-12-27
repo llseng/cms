@@ -28,6 +28,9 @@ class ApiBase
         $this->view    = $this->app['view'];
 		
 		
+		//请求IP
+		!defined("REQUEST_IP") && define("REQUEST_IP",Request::ip());
+		
 		//请求模块
 		!defined("MODULE_NAME") && define("MODULE_NAME",Request::module());
 		

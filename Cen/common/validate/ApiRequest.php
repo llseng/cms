@@ -47,7 +47,7 @@ class ApiRequest extends Validate
 	
 	/*
 	//管理名是否存在
-	public function nameExist($value,$rule = '',$arr = [],$tab)
+	public function applyExist($value,$rule = '',$arr = [],$tab)
 	{
 		//获取管理信息
 		$result = logic\Admin::getByName($value);

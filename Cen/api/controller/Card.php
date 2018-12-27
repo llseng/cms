@@ -38,6 +38,9 @@ class Card extends Base
 			'real_name' => $post['real_name'],
 		];
 		
+		//记录
+		$this->record($data);
+		
 		//验证器
 		$result = logics\Card::authV($data);
 		if( $result !== true )

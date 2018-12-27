@@ -54,7 +54,7 @@ class Mch
 	}
 	
 	//商户显示字段
-	static public $field = "id as mch_id,name,nick,phone,last_ip,last_time";
+	static public $field = "id as mch_id,name,nick,phone,email,last_ip,last_time";
 	
 	//获取商户信息 BY 商户名
 	static public function getMchByName($name)

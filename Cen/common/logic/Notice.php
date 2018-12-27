@@ -2,36 +2,42 @@
 // +----------------------------------------------------------------------
 // | LLS_WOODS [ Constantly improve yourself ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 念菲网络
+// | Copyright (c) 念菲网络 (http://www.cencms.com)
 // +----------------------------------------------------------------------
-// | Creation time 2018-11-07 15:54:38
+// | Creation time 2018-12-27
 // +----------------------------------------------------------------------
 // | Author: lls_woods <1300904522@qq.com>
 // +----------------------------------------------------------------------
 
-namespace app\mch\controller;
+namespace app\common\logic;
 
-use app\common\logic as logic;
-
-class Home extends Base
+class Notice
 {
+	//通知类型
+	public $type = [
+		//登录通知
+		'LOGIN' => [
+			'title' => '登录通知',
+			'msg' => '您的账号于{data}在{city}登录!',
+		],
+		
+		'CHANGE_PASS' => [
+			'title' => '修改密码通知',
+			'msg' => '您的账号于{data}修改密码成功!',
+		],
+	];
+
 	//构造函数
 	public function __construct()
 	{
-		//父级构造函数
-		parent::__construct();
-		
-		
-		
+	
+	
 	}
 	
-	//主页
-	public function index()
+	//通知
+	public function push()
 	{
-		logic\MchNotice::push('LOGIN');
-		
-		return json(self::returnSuccess($this->user));
 		
 	}
-	
+
 }

@@ -129,7 +129,7 @@ class MchApi
 	static public function getSign(array $where)
 	{
 		//
-		$result = Db::name(self::$dbName)->field('sign')->where($where)->where('cancel',0)->find();
+		$result = Db::name(self::$dbName)->field(self::$field)->field('sign')->where($where)->where('cancel',0)->find();
 		
 		return $result ?: false;
 	}

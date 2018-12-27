@@ -8,9 +8,6 @@ class Index extends \think\Controller
 	
     public function index()
     {
-		
-		dump(logic\MchApiIpwhite::mchApiIpwhiteOpenCount([]));
-		
     }
 
     public function hello($name = 'ThinkPHP5')

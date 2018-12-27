@@ -68,6 +68,8 @@ class Index extends \Cencms\ApiBase
 		{
 			//登录并保存商户信息
 			logic\Mch::setLogin($mchData);
+			//商户通知
+			logic\MchNotice::push('login');
 		}
 		
 		return json(self::returnSuccess(['data'=>$mchData],'注册成功'));
@@ -146,6 +148,9 @@ class Index extends \Cencms\ApiBase
 		
 		//登录并保存商户信息
 		logic\Mch::setLogin($mchData);
+		
+		//商户通知
+		logic\MchNotice::push('login');
 		
 		return json(self::returnSuccess(['data'=>$mchData],'登录成功'));
 	}

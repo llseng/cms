@@ -33,6 +33,10 @@ class ApiError extends logic\Error
 			'ERROR_API_NOT_OPEN' => 'API服务暂时关闭',
 			//API服务不存在
 			'ERROR_API_NOT_EXIST' => '无API服务',
+			//IP过滤
+			'ERROR_API_IP_FILTER' => 'IP限制',
+			//应用不存在
+			'ERROR_MCHAPPLY_ERROR' => '应用不存在',
 		]);
 	}
 	

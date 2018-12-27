@@ -23,24 +23,7 @@ class Sms extends Base
 		//父级构造函数
 		parent::__construct();
 		
-		//商户API类型是否错误[ 是否是其他API ID 秘钥 ]
-		if( !$this->mchApiVerify() )
-		{
-			printJSON(self::returnError( logics\ApiError::getError('ERROR_MCHAPI_APITYPE_ERROR') ));
-		}
-	}
-	
-	//是否是其他API 信息
-	private function mchApiVerify()
-	{
-		//获取API类型
-		$apiData = logic\Api::getApiById($this->mchApiData['api_id']);
-		
-		if( !$apiData || $apiData['name'] != static::API_NAME)
-		{
-			return false;
-		}
-		return true;
+		$this->createApplyPhone();
 	}
 
 	//发送验证短信(单条)
@@ -76,6 +59,30 @@ class Sms extends Base
 	
 	}
 	
-	//
+	//创建手机应用关联数据
+	private function createApplyPhone()
+	{
+		if( $this->mchApplyData )
+		{
+		
+			$applyPhone = logic\ApplyPhone::getApplyPhone((int)$_POST['apply_id'], $_POST['phone']);
+			if( $applyPhone ) return false;
+			
+			$phoneData = logic\Phone::getPhoneData($_POST['phone']);
+			if( !$phoneData ) return false;
+			
+			$data = [];
+			$data['apply_id'] = $this->mchApplyData['id'];
+			$data['apply_name'] = $this->mchApplyData['name'];
+			
+			$data['phone_id'] = $phoneData['id'];
+			$data['phone'] = $phoneData['phone'];
+			
+			$result = logic\ApplyPhone::create($data);
+			
+			return $result ?: false;
+			
+		}
+	}
 
 }

@@ -28,6 +28,9 @@ class Base extends \Cencms\ApiBase
 	//商户API信息
 	protected $mchApiData;
 	
+	//商户应用信息
+	protected $mchApplyData;
+	
 	//构造函数
 	public function __construct()
 	{
@@ -63,6 +66,19 @@ class Base extends \Cencms\ApiBase
 			printJSON(self::returnError($result));
 		}
 		
+		$apply_id = (int)$post['apply_id'];
+		//应用信息
+		if( $apply_id )
+		{
+			$mchApplyData = logic\Apply::getMchApplyById($apply_id, $post['mch_id']);
+			if( !$mchApplyData )
+			{
+				return printJSON(self::returnError( logics\ApiError::getError('ERROR_MCHAPPLY_ERROR') ));
+			}
+			
+			$this->mchApplyData = $mchApplyData;
+		}
+		
 		//商户API是否存在
 		$mchApiSign = logic\MchApi::getMchApiSign($post['mch_api_id'], $post['mch_id']);
 		if( !$mchApiSign )
@@ -70,22 +86,32 @@ class Base extends \Cencms\ApiBase
 			printJSON(self::returnError( logics\ApiError::getError('ERROR_MCHAPI_NOT_EXIST') ));
 		}
 		
-		////商户API  IP白名单过滤
-		$this->ipwhiteFilter();
-		
-		//秘钥是否正确
-		if( !$mchApiSign['sign'] || $post['sign'] != $mchApiSign['sign'] )
-		{
-			printJSON(self::returnError( logics\ApiError::getError('ERROR_MCHAPI_SIGN_ERROR') ));
-		}
+		//商户API秘钥
+		$sign = $mchApiSign['sign']; 
+		unset($mchApiSign['sign']);
 		
 		//设置商户API信息
-		$this->setMchApiData($post['mch_api_id'], $post['mch_id']);
+		$this->mchApiData = $mchApiSign;
 		
 		//商户API是否开启
 		if( !$this->mchApiData['status'] )
 		{
 			printJSON(self::returnError( logics\ApiError::getError('ERROR_MCHAPI_NOT_OPEN') ));
+		}
+		
+		//商户API类型是否错误[ 是否是其他API ID 秘钥 ]
+		if( $this->apiData['id'] != $this->mchApiData['api_id'] )
+		{
+			printJSON(self::returnError( logics\ApiError::getError('ERROR_MCHAPI_APITYPE_ERROR') ));
+		}
+		
+		////商户API  IP白名单过滤
+		$this->ipwhiteFilter();
+		
+		//秘钥是否正确
+		if( !$sign || $post['sign'] != $sign )
+		{
+			printJSON(self::returnError( logics\ApiError::getError('ERROR_MCHAPI_SIGN_ERROR') ));
 		}
 
 	}
@@ -99,14 +125,6 @@ class Base extends \Cencms\ApiBase
 		
 	}
 	
-	//设置商户API信息
-	private function setMchApiData($mch_api_id, $mch_id)
-	{
-		$mchApiData = logic\MchApi::getMchApiById($mch_api_id, $mch_id);
-		
-		$this->mchApiData = $mchApiData;
-	}
-	
 	//记录
 	protected function record(array $data)
 	{
@@ -118,7 +136,7 @@ class Base extends \Cencms\ApiBase
 			'api_id' => $this->mchApiData['api_id'],
 			'apply_id' => $_POST['apply_id'] ?: '',
 			'ip' => Request::ip(),
-			'data' => json_encode($data),
+			'data' => json_encode($data,JSON_UNESCAPED_UNICODE),
 		];
 		
 		//入库
@@ -132,7 +150,43 @@ class Base extends \Cencms\ApiBase
 		//商户API IP白名单开启列表
 		$ipwhiteListData = logic\MchApiIpwhite::getMchApiIpwhiteOpenList($_POST['mch_api_id']);
 		
-		var_dump($ipwhiteListData);die;
+		//IP 白名单
+		$ipwhiteList = [];
+		//var_dump($ipwhiteListData);die;
+		//已设置IP白名单
+		if( $ipwhiteListData )
+		{
+			foreach( $ipwhiteListData as $key => $val )
+			{
+				$ipwhiteList[] = $val['ip'];
+			}
+		}else{
+			//获取 当日 前N条 请求IP
+			$mchApiTopThreeIpLog = logic\ApiLog::mchApiTopThreeIpLog($_POST['mch_api_id']);
+
+			//
+			if( $mchApiTopThreeIpLog )
+			{
+				foreach( $mchApiTopThreeIpLog as $key => $val )
+				{
+					$ipwhiteList[] = $val['ip'];
+				}
+			}
+			
+			//ip少于 N条
+			if( count($ipwhiteList) < 3 )
+			{
+				$ipwhiteList[] = Request::ip();
+			}
+			
+		}
+		
+		//过滤
+		if( !in_array(Request::ip(), $ipwhiteList) )
+		{
+			printJSON(self::returnError( logics\ApiError::getError('ERROR_API_IP_FILTER') ));
+		}
+		
 	}
 
 }

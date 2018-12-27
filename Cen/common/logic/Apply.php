@@ -69,6 +69,25 @@ class Apply
 		return self::getApply($where);
 	}
 	
+	static public function getApplyById($id)
+	{
+		//条件
+		$where = [];
+		$where['id'] = $id;
+		
+		return self::getApply($where);
+	}
+	
+	static public function getMchApplyById($id, $mch_id)
+	{
+		//
+		$where = [];
+		$where['id'] = $id;
+		$where['mch_id'] = $mch_id;
+		
+		return self::getApply($where);
+	}
+	
 	//获取应用列表
 	static public function getList(array $where, $order = "create_time desc", $start = 0, $num = 20)
 	{
