@@ -8,6 +8,7 @@ class Index extends \think\Controller
 	
     public function index()
     {
+		
     }
 
     public function hello($name = 'ThinkPHP5')

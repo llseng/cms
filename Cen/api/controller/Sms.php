@@ -15,7 +15,6 @@ use app\common\logic as logic;
 
 class Sms extends Base
 {
-	const API_NAME = 'sms';
 	
 	//构造函数
 	public function __construct()
