@@ -78,6 +78,16 @@
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1) ;
                 curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1) ;
             }
+			
+			//是否是HTTPS请求
+			if(preg_match("/https:\/\//i",$api))
+			{
+				//FALSE 禁止 cURL 验证对等证书 
+				curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+				//1 是检查服务器SSL证书中是否存在一个公用名
+				curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,2);
+			}
+			
             $output = curl_exec($ch);
             curl_close($ch);
             $output = trim($output, "\xEF\xBB\xBF");

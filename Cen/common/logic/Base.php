@@ -103,6 +103,9 @@ class Base
 		//修改时间
 		$data['update_time'] = NOWTIME;
 		
+		//
+		if( isset($data['cancel']) ) unset($data['cancel']);
+		
 		//状态
 		isset($data['status']) && $data['status'] = $data['status'] ? 1 : 0;
 		
@@ -118,6 +121,18 @@ class Base
 		$where['id'] = $id;
 		
 		return static::set($where,$data);
+	}
+	
+	//删除数据
+	static public function cancel(array $where)
+	{
+		$data = [
+			'cancel' => 1,
+		];
+		
+		$result = Db::name(static::dbName())->where($where)->where('cancel',0)->update($data);
+		
+		return $result ?: false;
 	}
 	
 	//获取列表
@@ -150,6 +165,50 @@ class Base
 		
 		//获取
 		$result = Db::name(static::dbName())->field($field)->where($where_arr)->where('cancel',0)->order($order)->limit($start,$num)->select();
+		
+		return $result ?: false;
+		
+	}
+	
+	//获取 关联 列表
+	static public function xgetList(array $where, $order = "create_time desc", $start = 0, $num = 20)
+	{
+		//当前表别名
+		$dbAlias = 'a';
+		
+		//关联表
+		$joinDb = 'cen_mch b';
+		//关联表条件
+		$joinWhere = $dbAlias . ".mch_id = b.id";
+		//关联表显示字段
+		$joinField = "b.name as mch_name,b.nick as mch_nick";
+		
+        //可用条件
+        $yes_where = static::dbWhere();		
+		
+        //列表显示字段
+        $list_field = static::dbField();
+		foreach($list_field as $key => &$val){$val = $dbAlias.'.'.$val;}
+        
+        //显示字段
+        $field_str = join(",",$list_field) . ',' . $joinField;
+        //搜索条件
+        $where_arr = [];
+
+        //获取可用条件
+        if( $where )
+        {
+            foreach( $where as $key => $val )
+            {
+				//跳过不可用条件
+                if( !in_array($val[0],$yes_where) ) continue;
+                $val[0] = $dbAlias.'.'.$val[0];
+                $where_arr[] = $val;
+            }
+        }
+		
+		//获取
+		$result = Db::name(self::$dbName . " as " . $dbAlias)->field($field_str)->join($joinDb,$joinWhere)->where($where_arr)->where($dbAlias.'.cancel',0)->order($order)->limit($start,$num)->select();
 		
 		return $result ?: false;
 		

@@ -62,6 +62,23 @@ class Sms
 		return $result?:false;
 	}
 	
+	//发送短信验证码
+	static public function sendCode($code, $phone, $sign = false)
+	{
+		//请求参数
+		$param = [
+			'code' => $code,
+		];
+		
+		
+	}
+	
+	//模板短信发送
+	static public function xsend($param, $phone, $temp_id, $sign = false)
+	{
+		
+	}
+	
 	//发收短信
 	static public function send($code,$phone,$product = false,$tempcode = false)
 	{

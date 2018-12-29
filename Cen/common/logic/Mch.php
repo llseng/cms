@@ -56,13 +56,31 @@ class Mch
 	//商户显示字段
 	static public $field = "id as mch_id,name,nick,phone,email,last_ip,last_time";
 	
+	//获取
+	static public function get(array $where)
+	{
+		//
+		$result = Db::name(static::$dbName)->field(static::$field)->where($where)->where('cancel',0)->find();
+		
+		return $result ?: false;
+	}
+	
+	static public function getById($id)
+	{
+		$where = [
+			'id' => $id,
+		];
+		
+		return static::get($where);
+	}
+	
 	//获取商户信息 BY 商户名
 	static public function getMchByName($name)
 	{
 		//条件
 		$where = ['name'=>$name];
 		
-		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->find();
+		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->where('cancel',0)->find();
 		
 		return $result ?: false;
 		
@@ -74,7 +92,7 @@ class Mch
 		//条件
 		$where = ['phone'=>$phone];
 		
-		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->find();
+		$result = Db::name(self::$dbName)->field(self::$field)->where($where)->where('cancel',0)->find();
 		
 		return $result ?: false;
 		
@@ -89,12 +107,12 @@ class Mch
 		//登录名是手机格式
 		if( is_phone($user) )
 		{
-			$result = Db::name(self::$dbName)->field(self::$field)->where("phone='{$user}' and " . $where)->find();
+			$result = Db::name(self::$dbName)->field(self::$field)->where("phone='{$user}' and " . $where)->where('cancel',0)->find();
 		}
 		
 		//商户昵称登录
 		if( !$result){
-			$result = Db::name(self::$dbName)->field(self::$field)->where("name='{$user}' and " . $where)->find();
+			$result = Db::name(self::$dbName)->field(self::$field)->where("name='{$user}' and " . $where)->where('cancel',0)->find();
 		}
 		
 		return $result ?: false;

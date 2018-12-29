@@ -537,7 +537,7 @@ return [
 		
 		`ip` varchar(20) not null default '' comment '请求ip',
 		
-		`data` varchar(1000) unsigned not null default 0 comment '请求数据',
+		`data` varchar(1000) not null default 0 comment '请求数据',
 		
 		`create_time` int(11) unsigned not null default 0 comment '创建时间',
 		
@@ -559,7 +559,63 @@ return [
 	
 	)engine=innodb default charset=utf8 comment='API请求记录'",
 	
+	//短信模板库
+	'cen_sms_temp' => "CREATE TABLE cen_sms_temp(
 	
+		`id` int(11) unsigned not null auto_increment comment '主键',
+		
+		`mch_id` int(11) unsigned not null default 0 comment '所属商户ID',
+		
+		`content` varchar(100) not null comment '模板内容',
+		
+		`status` tinyint(1) not null default 0 comment '状态',
+		
+		`default` tinyint(1) not null default 0 comment '默认',
+		
+		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`update_time` int(11) unsigned not null default 0 comment '修改时间',
+		
+		`create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间[数据创建时自动写入创建时间]',
+		
+		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
+		
+		primary key(`id`),
+		
+		key `mch_id`(`mch_id`),
+		
+		key `create_time`(`create_time`)
+	
+	)engine=innodb auto_increment=1000 default charset=utf8 comment='短信模板库'",
+	
+	//短信签名库
+	'cen_sms_sign' => "CREATE TABLE cen_sms_sign(
+	
+		`id` int(11) unsigned not null auto_increment comment '主键',
+		
+		`mch_id` int(11) unsigned not null default 0 comment '所属商户ID',
+		
+		`sign` varchar(10) not null comment '签名',
+		
+		`status` tinyint(1) not null default 0 comment '状态',
+		
+		`default` tinyint(1) not null default 0 comment '默认',
+		
+		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`update_time` int(11) unsigned not null default 0 comment '修改时间',
+		
+		`create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间[数据创建时自动写入创建时间]',
+		
+		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
+		
+		primary key(`id`),
+		
+		key `mch_id`(`mch_id`),
+		
+		key `create_time`(`create_time`)
+	
+	)engine=innodb auto_increment=1000 default charset=utf8 comment='短信签名库'",
 ];
 
 ?>

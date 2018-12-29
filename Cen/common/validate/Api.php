@@ -23,10 +23,10 @@ class Api extends Validate
 		'name' => ['require', 'regex' => "/^\w{3,20}$/", 'nameExist'], 
 		
 		//API昵称
-		'nick' => ['require', 'regex' => "/^\S{4,20}$/"],
+		'nick' => ['require', 'regex' => "/^\S{4,20}$/u"],
 		
 		//API简介
-		'intro' => ['require', 'regex' => "/^\S{6,180}$/"],
+		'intro' => ['require', 'regex' => "/^\S{6,180}$/u"],
 		
 	];
 	

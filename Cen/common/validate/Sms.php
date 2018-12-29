@@ -23,7 +23,13 @@ class Sms extends Validate
 		'code' => ['require', 'regex' => "/^[0-9a-zA-Z]{4,6}$/"], 
 		
 		//手机号
-		'phone' => ['require','length' => 11, 'regex' => "/^1[3|4|5|7|8]\d{9}$/", 'phoneTimeLimit' => 80]
+		'phone' => ['require','length' => 11, 'regex' => "/^1[3|4|5|7|8]\d{9}$/"],
+		
+		//模板内容
+		'content' => ['require', 'regex' => "/^\S{6,100}$/u"],
+		
+		//短信签名
+		'sign' => ['require', 'regex' => "/^\S{2,6}$/u"],
 		
 	];
 	
@@ -35,6 +41,12 @@ class Sms extends Validate
 		//手机号
 		'phone.length' => '手机号长度错误',
 		'phone.regex' => '手机号格式错误,请提交正确手机号',
+		
+		//短信模板
+		'content.regex' => '短信模板格式错误,仅支持6-100个非空字符',
+		
+		//短信签名
+		'sign.regex' => '短信签名格式错误,仅支持2-6个非空字符',
 	
 	];
 	
@@ -42,8 +54,21 @@ class Sms extends Validate
 	public $scene = [
 		//发送验证短信(单条)
 		'send' => ['code','phone'],
+		
+		//创建短信模板
+		'createTemp' => ['content'],
+		
+		//设置短信模板
+		'setTemp' => ['content'],
+		
+		//创建短信签名
+		'createSign' => ['sign'],
+		
+		//设置短信签名
+		'setSign' => ['sign'],
 	];
 	
+	/*
 	//手机短信时间限制
 	public function phoneTimeLimit($value,$rule,$arr = [],$tab)
 	{
@@ -63,5 +88,6 @@ class Sms extends Validate
 		return true;
 		
 	}
+	*/
 
 }

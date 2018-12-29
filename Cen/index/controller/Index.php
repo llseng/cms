@@ -8,7 +8,9 @@ class Index extends \think\Controller
 	
     public function index()
     {
+		$sms = new \Addons\submail\Sms();
 		
+		dump($sms->send('18797818194','测试'));
     }
 
     public function hello($name = 'ThinkPHP5')

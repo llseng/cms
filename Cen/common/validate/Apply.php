@@ -23,10 +23,10 @@ class Apply extends Validate
 		'name' => ['require', 'regex' => "/^\w{6,20}$/", 'applyNameExist'], 
 		
 		//应用昵称
-		'nick' => ['require', 'regex' => "/^\S{4,20}$/"],
+		'nick' => ['require', 'regex' => "/^\S{4,20}$/u"],
 		
 		//应用简介
-		'intro' => ['require', 'regex' => "/^\S{6,180}$/"],
+		'intro' => ['require', 'regex' => "/^\S{6,180}$/u"],
 		
 		//应用秘钥
 		'sign' => ['require', 'regex' => "/^[0-9a-zA-Z]{32}$/"],

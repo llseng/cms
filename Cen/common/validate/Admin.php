@@ -14,16 +14,16 @@ class Admin extends Validate
 		'name' => ['require', 'regex' => "/^\w{5,20}$/", 'nameExist'], 
 		
 		//管理登录名
-		'username' => ['require', 'regex' => "/^\S{5,20}$/"],
+		'username' => ['require', 'regex' => "/^\S{5,20}$/u"],
 		
 		//手机号
 		'phone' => ['length' => 11, 'regex' => "/^1[3|4|5|7|8]\d{9}$/"],
 		
 		//管理昵称
-		'nick' => ['require', 'regex' => "/^\S{4,20}$/"],
+		'nick' => ['require', 'regex' => "/^\S{4,20}$/u"],
 		
 		//管理简介
-		'intro' => [ 'regex' => "/^\S{6,255}$/"],
+		'intro' => [ 'regex' => "/^\S{6,255}$/u"],
 		
 		//管理密码
 		'password' => ['require', 'regex' => "/^\w{6,16}$/"],

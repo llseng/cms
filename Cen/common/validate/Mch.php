@@ -17,13 +17,13 @@ class Mch extends Validate
 		'phone' => ['require','length' => 11, 'regex' => "/^1[3|4|5|7|8]\d{9}$/"],
 		
 		//商户昵称
-		'nick' => ['require', 'regex' => "/^\S{4,20}$/"],
+		'nick' => ['require', 'regex' => "/^\S{4,20}$/u"],
 		
 		//商户密码
 		'password' => ['require', 'regex' => "/^\w{6,16}$/"],
 		
 		//商户登录名
-		'user' => ['require', 'regex' => "/^\S{6,20}$/"],
+		'user' => ['require', 'regex' => "/^\S{6,20}$/u"],
 		
 	];
 	
