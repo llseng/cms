@@ -161,7 +161,7 @@ class Api extends Base
 		
 		//1.是否存在
 		//$result = logic\Api::getApiById($id);
-		if( !($id && $result = logic\Api::getApiById($id) ) ) 
+		if( !($id && $result = logic\Api::getApiById($id) ) )
 		{
 			return json(self::returnError('操作异常,API不存在'));
 		}

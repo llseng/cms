@@ -4,38 +4,62 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 念菲网络 (http://www.cencms.com)
 // +----------------------------------------------------------------------
-// | Creation time 2018-12-29
+// | Creation time 2019-01-02 
 // +----------------------------------------------------------------------
 // | Author: lls_woods <1300904522@qq.com>
 // +----------------------------------------------------------------------
-
-namespace app\admin\controller;
+// 
+namespace app\mch\controller;
 
 use app\common\logic as logic;
-use app\admin\logic as logics;
+use app\mch\logic as logics;
+use app\admin\logic as adminLogic;
 
 class Sms extends Base
 {
-
-	//构造函数
+	
+	//
 	public function __construct()
 	{
-		//执行父级构造函数
 		parent::__construct();
-		
 	}
-	
-	//主页
-	public function index()
+
+	//获取模板分类
+	public function getTempTypeList()
 	{
+
+		$post = input('post.');
 		
-		var_dump($this->admin->getData());
+		//排序
+		$order = 'create_time desc';
 		
-		return json(self::returnError());
+		//开始位置
+		$pageStart = 0;
+
+		//列表条数
+		$pageNum = 20;
 		
+		//查询条件
+		$whereArr = [];
+		//$whereArr[] = ['mch_id','=',$this->user['mch_id']];
+		
+		//自定义条件
+		if( $post )
+		{
+			//列表条数
+			if( $post['pageNum'] ) $pageNum = (int)$post['pageNum'];
+			//页码
+			if( $post['page'] )	$pageStart = ((int)$post['page'] - 1) * $pageNum;
+			
+		}
+		
+		//获取记录
+		$List = logic\SmsTempType::getList($whereArr, $order, $pageStart, $pageNum);
+		
+		return json(self::returnSuccess(['list'=>$List],'获取成功'));
 	}
-	
-	//获取 模板 列表
+
+	//获取模板列表
 	public function getTempList()
 	{
 		$post = input('post.');
@@ -51,6 +75,7 @@ class Sms extends Base
 		
 		//查询条件
 		$whereArr = [];
+		$whereArr[] = ['mch_id','=',$this->user['mch_id']];
 		
 		//自定义条件
 		if( $post )
@@ -67,7 +92,7 @@ class Sms extends Base
 		
 		return json(self::returnSuccess(['list'=>$List],'获取成功'));
 	}
-	
+
 	//创建 短信模板
 	public function createTemp()
 	{
@@ -78,7 +103,7 @@ class Sms extends Base
 		$data = [
 			'content' => $post['content'],
 			'type_id' => (int)$post['type_id'],
-			'mch_id' => (int)$post['mch_id'],
+			'mch_id' => $this->user['mch_id'],
 		];
 		
 		//数据验证
@@ -97,7 +122,7 @@ class Sms extends Base
 		
 		return json(self::returnSuccess(['id'=>$res],'操作成功'));
 	}
-	
+
 	//获取模板信息
 	public function getTemp()
 	{
@@ -106,17 +131,18 @@ class Sms extends Base
 		
 		//获取
 		//$res = logic\Api::getApiById($id);
-		if( !($id && $res = logic\SmsTemp::getById($id) ) ) 
+		if( !($id && $res = logic\SmsTemp::getMchTempById($id, $this->user['mch_id']) ) ) 
 		{
-			return json(self::returnError('操作异常,签名不存在'));
+			return json(self::returnError('操作异常,模板不存在'));
 		}
 
 		return json(self::returnSuccess(['data'=>$res],'获取成功'));
 	}
-	
+
 	//设置模板信息
 	public function setTemp()
 	{
+
 		//
 		$id = (int)input('id');
 		//
@@ -124,7 +150,7 @@ class Sms extends Base
 		
 		//1.是否存在
 		//$result = logic\Api::getApiById($id);
-		if( !($id && $tempData = logic\SmsTemp::getById($id) ) ) 
+		if( !($id && $tempData = logic\SmsTemp::getMchTempById($id, $this->user['mch_id']) ) ) 
 		{
 			return json(self::returnError('操作异常,模板不存在'));
 		}
@@ -133,7 +159,7 @@ class Sms extends Base
 		$data = [
 			'content' => $post['content'],
 			'type_id' => (int)$post['type_id'],
-			'mch_id' => (int)$post['mch_id'],
+			'mch_id' => $this->user['mch_id'],
 		];
 		
 		//2.数据验证
@@ -167,7 +193,7 @@ class Sms extends Base
 		
 		//1.是否存在
 		//$result = logic\Api::getApiById($id);
-		if( !($id && $result = logic\SmsTemp::getById($id) ) ) 
+		if( !($id && $result = logic\SmsTemp::getMchTempById($id, $this->user['mch_id']) ) ) 
 		{
 			return json(self::returnError('操作异常,模板不存在'));
 		}
@@ -195,7 +221,7 @@ class Sms extends Base
 		$id = (int)input('id');
 		
 		//1.是否存在
-		if( !($id && $result = logic\SmsTemp::getById($id) ) ) 
+		if( !($id && $result = logic\SmsTemp::getMchTempById($id, $this->user['mch_id']) ) ) 
 		{
 			return json(self::returnError('操作异常,模板不存在'));
 		}
@@ -209,7 +235,7 @@ class Sms extends Base
 		
 		return json(self::returnSuccess([],'操作成功'));
 	}
-	
+
 	//获取 短信签名 列表
 	public function getSignList()
 	{
@@ -226,6 +252,7 @@ class Sms extends Base
 		
 		//查询条件
 		$whereArr = [];
+		$whereArr[] = ['mch_id','=',$this->user['mch_id']];
 		
 		//自定义条件
 		if( $post )
@@ -252,7 +279,7 @@ class Sms extends Base
 		//数据
 		$data = [
 			'sign' => $post['sign'],
-			'mch_id' => (int)$post['mch_id'],
+			'mch_id' => $this->user['mch_id'],
 		];
 		
 		//数据验证
@@ -280,7 +307,7 @@ class Sms extends Base
 		
 		//获取
 		//$res = logic\Api::getApiById($id);
-		if( !($id && $res = logic\SmsSign::getById($id) ) ) 
+		if( !($id && $res = logic\SmsSign::getMchSignById($id, $this->user['mch_id']) ) ) 
 		{
 			return json(self::returnError('操作异常,签名不存在'));
 		}
@@ -298,7 +325,7 @@ class Sms extends Base
 		
 		//1.是否存在
 		//$result = logic\Api::getApiById($id);
-		if( !($id && $result = logic\SmsSign::getById($id) ) ) 
+		if( !($id && $result = logic\SmsSign::getMchSignById($id, $this->user['mch_id']) ) ) 
 		{
 			return json(self::returnError('操作异常,签名不存在'));
 		}
@@ -306,7 +333,7 @@ class Sms extends Base
 		//数据
 		$data = [
 			'sign' => $post['sign'],
-			'mch_id' => (int)$post['mch_id'],
+			'mch_id' => $this->user['mch_id'],
 		];
 		
 		//2.数据验证
@@ -334,7 +361,7 @@ class Sms extends Base
 		
 		//1.是否存在
 		//$result = logic\Api::getApiById($id);
-		if( !($id && $result = logic\SmsSign::getById($id) ) ) 
+		if( !($id && $result = logic\SmsSign::getMchSignById($id, $this->user['mch_id']) ) ) 
 		{
 			return json(self::returnError('操作异常,签名不存在'));
 		}
@@ -354,6 +381,28 @@ class Sms extends Base
 		
 		return json(self::returnSuccess([], $status . '成功' ));
 	}
+
+	//删除签名
+	public function deleteSign()
+	{
+		//
+		$id = (int)input('id');
+		
+		//1.是否存在
+		if( !($id && $result = logic\SmsSign::getMchSignById($id, $this->user['mch_id']) ) ) 
+		{
+			return json(self::returnError('操作异常,签名不存在'));
+		}
+
+		//设置
+		$res = logic\SmsSign::cancelById($id);
+		if( !$res )
+		{
+			return json(self::returnError('操作失败'));
+		}
+		
+		return json(self::returnSuccess([],'操作成功'));
+	}
 	
 	//设置模板默认
 	public function setTempDefault()
@@ -363,7 +412,7 @@ class Sms extends Base
 		
 		//1.是否存在
 		//$result = logic\Api::getApiById($id);
-		if( !($id && $result = logic\SmsTemp::getById($id) ) ) 
+		if( !($id && $result = logic\SmsTemp::getMchTempById($id, $this->user['mch_id']) ) ) 
 		{
 			return json(self::returnError('操作异常,模板不存在'));
 		}
@@ -388,7 +437,7 @@ class Sms extends Base
 		
 		//1.是否存在
 		//$result = logic\Api::getApiById($id);
-		if( !($id && $result = logic\SmsSign::getById($id) ) ) 
+		if( !($id && $result = logic\SmsSign::getMchSignById($id, $this->user['mch_id']) ) ) 
 		{
 			return json(self::returnError('操作异常,签名不存在'));
 		}
@@ -404,156 +453,6 @@ class Sms extends Base
 		
 		return json(self::returnSuccess([], $status . '成功' ));
 	}
-
-	//删除签名
-	public function deleteSign()
-	{
-		//
-		$id = (int)input('id');
-		
-		//1.是否存在
-		if( !($id && $result = logic\SmsSign::getById($id) ) ) 
-		{
-			return json(self::returnError('操作异常,签名不存在'));
-		}
-
-		//设置
-		$res = logic\SmsSign::cancelById($id);
-		if( !$res )
-		{
-			return json(self::returnError('操作失败'));
-		}
-		
-		return json(self::returnSuccess([],'操作成功'));
-	}
-
-	//获取模板分类
-	public function getTempTypeList()
-	{
-
-		$post = input('post.');
-		
-		//排序
-		$order = 'create_time desc';
-		
-		//开始位置
-		$pageStart = 0;
-
-		//列表条数
-		$pageNum = 20;
-		
-		//查询条件
-		$whereArr = [];
-		
-		//自定义条件
-		if( $post )
-		{
-			//列表条数
-			if( $post['pageNum'] ) $pageNum = (int)$post['pageNum'];
-			//页码
-			if( $post['page'] )	$pageStart = ((int)$post['page'] - 1) * $pageNum;
-			
-		}
-		
-		//获取记录
-		$List = logic\SmsTempType::getList($whereArr, $order, $pageStart, $pageNum);
-		
-		return json(self::returnSuccess(['list'=>$List],'获取成功'));
-	}
-
-	//创建模板分类
-	public function createTempType()
-	{
-		//
-		$post = input('post.');
-
-		//数据
-		$data = [
-			'name' => $post['name'],
-		];
-
-		//数据验证
-		$result = logics\Sms::createTempTypeV($data);
-		if( $result !== true )
-		{
-			return json(self::returnError($result));
-		}
-		
-		//
-		$res = logic\SmsTempType::create($data);
-		if( !$res )
-		{
-			return json(self::returnError('操作失败',$data));
-		}
-		
-		return json(self::returnSuccess(['id'=>$res],'操作成功'));
-
-	}
-
-	//修改模板分类
-	public function setTempType()
-	{
-//
-		$id = (int)input('id');
-		//
-		$post = input('post.');
-		
-		//1.是否存在
-		//$result = logic\Api::getApiById($id);
-		if( !($id && $result = logic\SmsTempType::getById($id) ) ) 
-		{
-			return json(self::returnError('操作异常,模板分类不存在'));
-		}
-		
-		//数据
-		$data = [
-			'name' => $post['name'],
-		];
-		
-		//2.数据验证
-		$result = logics\Sms::setTempTypeV( $id, $data);
-		if( $result !== true ){
-			return json(self::returnError($result));
-		}
-		
-		//设置
-		$res = logic\SmsTempType::setById($id, $data);
-		if( !$res )
-		{
-			return json(self::returnError('操作失败'));
-		}
-		
-		return json(self::returnSuccess([],'操作成功'));
-
-	}
-
-	//删除模板分类
-	public function deleteTempType()
-	{
-		//
-		$id = (int)input('id');
-
-		//1.是否存在
-		if( !($id && $result = logic\SmsTempType::getById($id) ) ) 
-		{
-			return json(self::returnError('操作异常,模板分类不存在'));
-		}
-
-		//是否有正在使用记录
-		$result = logic\SmsTemp::get(['type_id'=>$id]);
-		if( $result )
-		{
-			return json(self::returnError('正在使用,操作失败'));
-		}
-
-		//设置
-		$res = logic\SmsTempType::cancelById($id);
-		if( !$res )
-		{
-			return json(self::returnError('操作失败'));
-		}
-		
-		return json(self::returnSuccess([],'操作成功'));
-	}
 	
+
 }

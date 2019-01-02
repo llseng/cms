@@ -1,18 +1,18 @@
-<?php
+<?php 
 // +----------------------------------------------------------------------
 // | LLS_WOODS [ Constantly improve yourself ]
 // +----------------------------------------------------------------------
 // | Copyright (c) 念菲网络 (http://www.cencms.com)
 // +----------------------------------------------------------------------
-// | Creation time 2018-12-19
+// | Creation time 2018-12-21
 // +----------------------------------------------------------------------
 // | Author: lls_woods <1300904522@qq.com>
 // +----------------------------------------------------------------------
 
-namespace app\admin\logic;
+namespace app\mch\logic;
 
-use app\common\logic as logic;
 use app\common\validate as validate;
+use app\common\logic as logic;
 
 class Sms
 {
@@ -28,16 +28,6 @@ class Sms
 		if( !$result )
 		{
 			return $validate->getError();
-		}
-		
-		//商户
-		if( $data['mch_id'])
-		{
-			$mchData = logic\Mch::getById($data['mch_id']);
-			if( !$mchData )
-			{
-				return '商户不存在';
-			}
 		}
 
 		//模板分类
@@ -74,16 +64,6 @@ class Sms
 			return $validate->getError();
 		}
 		
-		//商户
-		if( $data['mch_id'])
-		{
-			$mchData = logic\Mch::getById($data['mch_id']);
-			if( !$mchData )
-			{
-				return '商户不存在';
-			}
-		}
-		
 		//签名
 		$temp = logic\SmsSign::getBySign($data['sign'], $data['mch_id']);
 		if( $temp )
@@ -106,16 +86,6 @@ class Sms
 		if( !$result )
 		{
 			return $validate->getError();
-		}
-		
-		//商户
-		if( $data['mch_id'])
-		{
-			$mchData = logic\Mch::getById($data['mch_id']);
-			if( !$mchData )
-			{
-				return '商户不存在';
-			}
 		}
 
 		//模板分类
@@ -155,16 +125,6 @@ class Sms
 		if( !$result )
 		{
 			return $validate->getError();
-		}
-		
-		//商户
-		if( $data['mch_id'])
-		{
-			$mchData = logic\Mch::ById($data['mch_id']);
-			if( !$mchData )
-			{
-				return '商户不存在';
-			}
 		}
 		
 		//重名验证
@@ -236,66 +196,5 @@ class Sms
 		return $result ?: false;
 	}
 
-	//创建模板分类数据验证
-	static public function createTempTypeV(array $data)
-	{
-		//
-		$validate = new validate\Sms();
-		
-		$result = $validate->scene('createTempType')->check($data);
-		
-		if( !$result )
-		{
-			return $validate->getError();
-		}
 
-		//条件
-		$where = ['name'=>$data['name']];
-		$res = logic\SmsTempType::get($where);
-		if( $res )
-		{
-			return '已存在相同模板分类';
-		}
-
-		return true;
-	}
-
-	//设置模板分类
-	static public function setTempTypeV($id, array $data)
-	{
-
-		//
-		$validate = new validate\Sms();
-		
-		$result = $validate->scene('setTempType')->check($data);
-		
-		if( !$result )
-		{
-			return $validate->getError();
-		}
-
-		//重名验证
-		$where = [
-			['id','not in',$id],
-			['name','=',$data['name']],
-		];
-		$res = logic\SmsTempType::get($where);
-		if( $res )
-		{
-			return "已存在相同模板分类,无需重复创建";
-		}
-		
-		return true;
-
-	}
-
-	//构造函数
-	public function __construct()
-	{
-		//执行父级构造函数
-		parent::__construct();
-	
-	}
-
-	
 }

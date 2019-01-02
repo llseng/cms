@@ -19,7 +19,7 @@ class SmsTemp extends Base
 	static public $dbName = 'sms_temp';
 	
 	//
-	static public $dbField = 'id,mch_id,content,status,update_time,create_time,create_date,default';
+	static public $dbField = 'id,mch_id,type_id,content,status,update_time,create_time,create_date,default';
 	
 	
 	//获取列表
@@ -34,6 +34,13 @@ class SmsTemp extends Base
 		$joinWhere = $dbAlias . ".mch_id = b.id";
 		//关联表显示字段
 		$joinField = "b.name as mch_name,b.nick as mch_nick";
+
+		//关联表2
+		$joinDb_2 = 'cen_sms_temp_type c';
+		//关联表条件
+		$joinWhere_2 = $dbAlias . ".type_id = c.id";
+		//关联表显示字段
+		$joinField_2 = "c.name as type";
 		
         //可用条件
         $yes_where = static::dbWhere();		
@@ -43,7 +50,7 @@ class SmsTemp extends Base
 		foreach($list_field as $key => &$val){$val = $dbAlias.'.'.$val;}
         
         //显示字段
-        $field_str = join(",",$list_field) . ',' . $joinField;
+        $field_str = join(",",$list_field) . ',' . $joinField . ',' . $joinField_2;
         //搜索条件
         $where_arr = [];
 
@@ -60,7 +67,7 @@ class SmsTemp extends Base
         }
 		
 		//获取
-		$result = Db::name(self::$dbName . " as " . $dbAlias)->field($field_str)->leftJoin($joinDb,$joinWhere)->where($where_arr)->where($dbAlias.'.cancel',0)->order($order)->limit($start,$num)->select();
+		$result = Db::name(self::$dbName . " as " . $dbAlias)->field($field_str)->leftJoin($joinDb,$joinWhere)->leftJoin($joinDb_2,$joinWhere_2)->where($where_arr)->where($dbAlias.'.cancel',0)->order($order)->limit($start,$num)->select();
 		
 		return $result ?: false;
 		
@@ -75,6 +82,17 @@ class SmsTemp extends Base
 			'mch_id' => (int)$mch_id,
 		];
 		
+		return static::get($where);
+	}
+
+	//获取商户模板
+	static public function getMchTempById($id, $mch_id)
+	{
+		$where = [
+			'id' => $id,
+			'mch_id' => $mch_id,
+		];
+
 		return static::get($where);
 	}
 	

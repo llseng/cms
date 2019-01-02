@@ -28,8 +28,14 @@ class Sms extends Validate
 		//模板内容
 		'content' => ['require', 'regex' => "/^\S{6,100}$/u"],
 		
+		//模板分类
+		'type_id' => ['require', 'integer'],
+		
 		//短信签名
 		'sign' => ['require', 'regex' => "/^\S{2,6}$/u"],
+		
+		//模板分类名
+		'name' => ['require', 'regex' => "/^\S{2,6}$/u"],
 		
 	];
 	
@@ -45,8 +51,14 @@ class Sms extends Validate
 		//短信模板
 		'content.regex' => '短信模板格式错误,仅支持6-100个非空字符',
 		
+		//短信模板分类
+		'type_id.integer' => '短信模板分类格式错误,只可是数字',
+		
 		//短信签名
 		'sign.regex' => '短信签名格式错误,仅支持2-6个非空字符',
+		
+		//模板分类名
+		'name.regex' => '模板分类名格式错误,仅支持2-6个非空字符',
 	
 	];
 	
@@ -56,16 +68,22 @@ class Sms extends Validate
 		'send' => ['code','phone'],
 		
 		//创建短信模板
-		'createTemp' => ['content'],
+		'createTemp' => ['content','type_id'],
 		
 		//设置短信模板
-		'setTemp' => ['content'],
+		'setTemp' => ['content','type_id'],
 		
 		//创建短信签名
 		'createSign' => ['sign'],
 		
 		//设置短信签名
 		'setSign' => ['sign'],
+		
+		//创建模板分类名
+		'createTempType' => ['name'],
+		
+		//设置模板分类名
+		'setTempType' => ['name'],
 	];
 	
 	/*

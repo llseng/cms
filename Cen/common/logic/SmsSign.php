@@ -78,4 +78,15 @@ class SmsSign extends Base
 		return static::get($where);
 	}
 
+	//获取商户签名
+	static public function getMchSignById($id, $mch_id)
+	{
+		$where = [
+			'id' => $id,
+			'mch_id' => $mch_id, 
+		];
+
+		return static::get($where);
+	}
+
 }

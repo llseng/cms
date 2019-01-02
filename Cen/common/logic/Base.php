@@ -134,6 +134,13 @@ class Base
 		
 		return $result ?: false;
 	}
+
+	static public function cancelById($id)
+	{
+		$where = ['id'=>$id];
+
+		return static::cancel($where);
+	}
 	
 	//获取列表
 	static public function getList(array $where, $order = "create_time desc", $start = 0, $num = 20)

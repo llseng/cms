@@ -176,7 +176,7 @@ return [
 	)ENGINE=MYISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='支付系统基础配置'",
 	
 	//管理员列表
-	'cen_admin' => "create table cen_admin(
+	'cen_admin' => "CREATE table cen_admin(
 	
 		`id` smallint(5) unsigned not null auto_increment comment '主键',
 		
@@ -221,7 +221,7 @@ return [
 	)engine=innodb default charset=utf8 comment='管理员列表'",
 	
 	//商户列表
-	'cen_mch' => "create table cen_mch(
+	'cen_mch' => "CREATE table cen_mch(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键',
 		
@@ -264,7 +264,7 @@ return [
 	)engine=innodb default charset=utf8 auto_increment=1000 comment='商户列表'",
 	
 	//应用列表
-	'cen_apply' => "create table cen_apply(
+	'cen_apply' => "CREATE table cen_apply(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键',
 		
@@ -298,7 +298,7 @@ return [
 	)engine=innodb default charset=utf8 auto_increment=1000 comment='商户列表'",
 	
 	//手机号列表
-	'cen_phone' => "create table cen_phone(
+	'cen_phone' => "CREATE table cen_phone(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键',
 		
@@ -327,7 +327,7 @@ return [
 	)engine=innodb default charset=utf8 auto_increment=1000 comment='手机号码列表'",
 	
 	//手机短信列表
-	'cen_smslist' => "create table cen_smslist(
+	'cen_smslist' => "CREATE table cen_smslist(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键ID',
 		
@@ -362,7 +362,7 @@ return [
 	)engine=innodb default charset=utf8 comment='手机短信列表'",
 	
 	//身份证信息列表
-	'cen_card' => "create table cen_card(
+	'cen_card' => "CREATE table cen_card(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键',
 		
@@ -397,7 +397,7 @@ return [
 	)engine=innodb default charset=utf8 auto_increment=1000 comment='身份证信息列表'",
 	
 	//手机应用关联表
-	'cen_apply_phone' => "create table cen_apply_phone(
+	'cen_apply_phone' => "CREATE table cen_apply_phone(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键',
 		
@@ -432,7 +432,7 @@ return [
 	)engine=innodb default charset=utf8 comment='商户列表'",
 	
 	//接口表
-	'cen_api' => "create table cen_api(
+	'cen_api' => "CREATE table cen_api(
 		
 		`id` smallint(5) unsigned not null auto_increment comment '主键',
 		
@@ -461,7 +461,7 @@ return [
 	)engine=innodb default charset=utf8 comment='API列表'",
 	
 	//商户接口关联表
-	'cen_mch_api' => "create table cen_mch_api(
+	'cen_mch_api' => "CREATE table cen_mch_api(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键',
 		
@@ -490,7 +490,7 @@ return [
 	)engine=innodb auto_increment=1000 default charset=utf8 comment='商户接口关联表'",
 	
 	//商户API白名单
-	'cen_mch_api_ipwhite' => "create table cen_mch_api_ipwhite(
+	'cen_mch_api_ipwhite' => "CREATE table cen_mch_api_ipwhite(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键',
 		
@@ -523,7 +523,7 @@ return [
 	)engine=innodb default charset=utf8 comment='商户API白名单'",
 	
 	//API请求记录
-	'cen_api_log' => "create table cen_api_log(
+	'cen_api_log' => "CREATE table cen_api_log(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键',
 		
@@ -563,6 +563,8 @@ return [
 	'cen_sms_temp' => "CREATE TABLE cen_sms_temp(
 	
 		`id` int(11) unsigned not null auto_increment comment '主键',
+
+		`type_id` int(11) unsigned not null comment '類型',
 		
 		`mch_id` int(11) unsigned not null default 0 comment '所属商户ID',
 		
@@ -587,6 +589,27 @@ return [
 		key `create_time`(`create_time`)
 	
 	)engine=innodb auto_increment=1000 default charset=utf8 comment='短信模板库'",
+	
+	//短信模板類型
+	'cen_sms_temp_type' => "CREATE TABLE cen_sms_temp_type(
+	
+		`id` int(11) unsigned not null auto_increment comment '主键',
+		
+		`name` varchar(20) not null comment '類型名字',
+
+		`create_time` int(11) unsigned not null default 0 comment '创建时间',
+		
+		`update_time` int(11) unsigned not null default 0 comment '修改时间',
+		
+		`create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间[数据创建时自动写入创建时间]',
+		
+		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
+		
+		primary key(`id`),
+		
+		key `create_time`(`create_time`)
+
+	)engine=innodb default charset=utf8 comment='短信模板類型'",
 	
 	//短信签名库
 	'cen_sms_sign' => "CREATE TABLE cen_sms_sign(
