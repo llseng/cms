@@ -85,11 +85,30 @@ class SmsTemp extends Base
 		return static::get($where);
 	}
 
+	//获取默认模板
+	/**
+	 * *
+	 * @param  integer  $type_id [分类ID]
+	 * @param  integer $mch_id  [商户ID]
+	 * @return array           [mysql数据]
+	 */
+	static public function getDefault($type_id, $mch_id = 0)
+	{
+		$where = [
+			'default' => 1,
+			'type_id' => (int)$type_id,
+			'mch_id'  => (int)$mch_id,
+		];
+
+		return static::get($where);
+	}
+
 	//获取商户模板
 	static public function getMchTempById($id, $mch_id)
 	{
 		$where = [
 			'id' => $id,
+			'status' => 1,
 			'mch_id' => $mch_id,
 		];
 

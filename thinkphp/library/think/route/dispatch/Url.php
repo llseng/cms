@@ -60,6 +60,11 @@ class Url extends Dispatch
             $controller = !empty($path) ? array_shift($path) : null;
         }
 
+        //由于框架对控制器名没有进行足够的检测会导致在没有开启强制路由的情况下可能的getshell漏洞
+        if ($controller && !preg_match('/^[A-Za-z](\w|\.)*$/', $controller)) {
+            throw new HttpException(404, 'controller not exists:' . $controller);
+        }
+
         // 解析操作
         $action = !empty($path) ? array_shift($path) : null;
 

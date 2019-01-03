@@ -331,7 +331,7 @@ return [
 	
 		`id` int(11) unsigned not null auto_increment comment '主键ID',
 		
-		`biz_id` varchar(20) not null comment '第三方流水号',
+		`send_id` varchar(32) not null comment '第三方流水号',
 		
 		`mch_id` int(11) unsigned not null comment '商户ID',
 		
@@ -341,9 +341,13 @@ return [
 		
 		`params` varchar(255) not null comment '请求参数',
 		
-		`product` varchar(10) not null comment '签名',
+		`sign_id` varchar(10) not null comment '签名ID',
+
+		`sign` varchar(10) not null comment '签名',
 		
-		`temp_id` varchar(20) not null comment '模板ID',
+		`temp_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '模板ID',
+
+		`temp` varchar(100) not null comment '模板',
 		
 		`create_time` int(11) unsigned not null default 0 comment '创建时间',
 		
@@ -354,6 +358,10 @@ return [
 		key `mch_id`(`mch_id`),
 		
 		key `apply_id`(`apply_id`),
+
+		key `sign_id`(`sign_id`),
+
+		key `temp_id`(`temp_id`),
 		
 		key `phone`(`phone`),
 		

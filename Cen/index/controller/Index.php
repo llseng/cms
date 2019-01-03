@@ -8,7 +8,13 @@ class Index extends \think\Controller
 	
     public function index()
     {
-    	return '测试';
+    	$a = 0;
+
+    	$a ? $a = '123135132123' : $a = 6666;
+
+    	//if( $a ) $a = 123;
+
+    	var_dump($a);
     }
 
     public function hello($name = 'ThinkPHP5')

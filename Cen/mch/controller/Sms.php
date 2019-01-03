@@ -13,7 +13,6 @@ namespace app\mch\controller;
 
 use app\common\logic as logic;
 use app\mch\logic as logics;
-use app\admin\logic as adminLogic;
 
 class Sms extends Base
 {

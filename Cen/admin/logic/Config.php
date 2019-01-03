@@ -4,29 +4,40 @@
 // +----------------------------------------------------------------------
 // | Copyright (c) 念菲网络 (http://www.cencms.com)
 // +----------------------------------------------------------------------
-// | Creation time 2019-01-02 
+// | Creation time 2019-01-03 
 // +----------------------------------------------------------------------
 // | Author: lls_woods <1300904522@qq.com>
 // +----------------------------------------------------------------------
 
-namespace app\common\logic;
+namespace app\admin\logic;
 
-class SmsTempType extends Base
+use app\common\logic as logic;
+use app\common\validate as validate;
+
+class Config
 {
+
+	//设置配置数据
+	static public function setV(array $data)
+	{
+		//
+		$validate = new validate\Config();
+		
+		$result = $validate->scene('set')->check($data);
+		
+		if( !$result )
+		{
+			return $validate->getError();
+		}
+		
+		return true;
+	}
 	
 	//
-	static public $dbName = 'sms_temp_type';
-
-	//
-	static public $dbField = 'id,name,create_time,create_date,update_time';
-
-	//删除记录
-	static public function cancel(array $where)
+	public function __construct()
 	{
-		//不可删除 1 2 分类
-		if( in_array($where['id'], [1,2]) ) return false;
 
-		return parent::cancel($where);
+
 	}
 
 }

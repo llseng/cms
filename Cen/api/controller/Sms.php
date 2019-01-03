@@ -25,8 +25,14 @@ class Sms extends Base
 		$this->createApplyPhone();
 	}
 
+	//发送营销短信
+	public function sendMarket()
+	{
+		
+	}
+
 	//发送验证短信(单条)
-	public function send()
+	public function sendCode()
 	{
 		//POST提交
 		$post = input('post.');
@@ -45,9 +51,12 @@ class Sms extends Base
 		{
 			return json(self::returnError($result));
 		}
+
+		//有效期
+		$time = $post['time'] ?: 10;
 		
 		//短信发送
-		$send = 1;//logic\Sms::send($data['code'],$data['phone']);
+		$send = logic\Sms::sendCode($data['code'],$time,$data['phone'],$post['mch_id']);
 		
 		if( !$send ) 
 		{

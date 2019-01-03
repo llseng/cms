@@ -89,4 +89,16 @@ class SmsSign extends Base
 		return static::get($where);
 	}
 
+	//获取默认签名
+	static public function getDefault($mch_id = 0)
+	{
+		$where = [
+			'default' => 1,
+			'status' => 1,
+			'mch_id' => (int)$mch_id,
+		];
+
+		return static::get($where);
+	}
+
 }

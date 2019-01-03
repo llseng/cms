@@ -76,7 +76,7 @@ class Config
         
         if( !self::$case )
         {
-            self::$case = new Config();
+            self::$case = new self();
         }
 
         return  self::$case;
@@ -97,6 +97,13 @@ class Config
             $find['group'] = substr($string,0,$dStartNum);
             //键名
             $find['name'] = substr($string,$dStartNum+1);
+
+            if( empty($find['group']) && $find['name'] )
+            {
+                $find['group'] = $find['name'];
+                $find['name'] = '';
+            }
+
         }else{
             //键名
             $find['name'] = $string;
@@ -104,14 +111,14 @@ class Config
 
         $result = self::getConfig($find['name'],$find['group']);
         
-        if( $result ) return $result['value'];
+        if( $result['value'] ) return $result['value'];
 
         return $result;
     }
 
     //获取缓存配置
-    static public function getConfig($name,$group = false)
-    {
+    static private function getConfig($name,$group = false)
+    {//var_dump(self::init()->config);die;
         //获取组名
         $group || $group = "default";
 
@@ -119,7 +126,7 @@ class Config
         {
             $result = self::init()->config[$group][$name];
         }else{
-
+            //die($group);
             $result = self::init()->config[$group];
         }
 
@@ -136,8 +143,11 @@ class Config
     }
 
     //设置配置信息
-    static public function set_config($name,$value,$group = '',$intro = false)
+    static public function set_config($name,$value,$group = false,$intro = false)
     {
+        $group = $group ?: '';
+        $intro = $intro ?: '';
+
         //是否有已有配置
         $config_existes = self::get_config($name,$group);
         //存在
@@ -153,9 +163,9 @@ class Config
             //修改数据
             $update = [
                 'value' => $value,
+                'intro' => $intro,
                 'settime' => NOWTIME, //修改时间
             ];
-            $intro !== false && $update['intro'] = $intro;
 
             $result = Db::name("config")->where($where)->update($update);
 
@@ -165,10 +175,10 @@ class Config
                 'name' => $name,
                 'group' => $group,
                 'value' => $value,
+                'intro' => $intro,
                 'addtime' => NOWTIME,
                 'settime' => NOWTIME,
             ];
-            $intro !== false && $insert['intro'] = $intro;
 
             $result = Db::name('config')->insert($insert);
         }
@@ -204,7 +214,7 @@ class Config
     }
 
     //获取配置
-    static public function get_config($name,$group = '')
+    static private function get_config($name,$group = '')
     {
         //条件
         $where = [

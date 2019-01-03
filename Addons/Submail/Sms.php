@@ -92,10 +92,33 @@ class Sms
 		if( $result['status'] != "success" )
 		{
 			//状态码 错误信息
-			return $result['code'] . ':' . $result['msg'];
+			return '接口请求异常 : ' . $result['code'] . '-' . $result['msg'];
 		}
 		
-		return true;
+		return $result;
+	}
+
+
+	/** ========== **/
+
+	//
+	static $Instance;
+	
+	static public function init()
+	{
+		if( !self::$Instance )
+		{
+			self::$Instance = new self();
+		}
+		
+		return self::$Instance;
+	}
+	
+	static public function sendSms($phone, $content, $sign = false)
+	{
+		$init = static::init();
+
+		return $init->send($phone, $content, $sign);
 	}
 
 }
