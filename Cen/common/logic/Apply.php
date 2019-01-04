@@ -139,6 +139,7 @@ class Apply
 		isset($data['status']) && $update['status'] = $data['status'] ? 1 : 0;
 		//撤销
 		//isset($data['cancel']) && $update['cancel'] = $data['cancel'] ? 1 : 0;
+		$update['update_time'] = NOWTIME;
 		
 		$result = Db::name(self::$dbName)->where($where)->update($update);
 		

@@ -281,6 +281,8 @@ return [
 		`status` tinyint(1) unsigned not null default 0 comment '启用状态',
 		
 		`create_time` int(11) unsigned not null default 0 comment '创建时间搓',
+
+		`update_time` int(11) unsigned not null default 0 comment '修改时间',
 		
 		`cancel` tinyint(1) unsigned not null default 0 comment '撤销|删除',
 		

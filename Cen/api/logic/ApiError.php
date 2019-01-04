@@ -37,6 +37,8 @@ class ApiError extends logic\Error
 			'ERROR_API_IP_FILTER' => 'IP限制',
 			//应用不存在
 			'ERROR_MCHAPPLY_ERROR' => '应用不存在',
+			//应用未开启
+			'ERROR_MCHAPPLY_NOT_OPEN' => '应用未开启',
 		]);
 	}
 	

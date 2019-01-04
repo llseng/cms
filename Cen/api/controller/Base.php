@@ -75,6 +75,12 @@ class Base extends \Cencms\ApiBase
 			{
 				return printJSON(self::returnError( logics\ApiError::getError('ERROR_MCHAPPLY_ERROR') ));
 			}
+
+			//应用未开启
+			if( !$mchApplyData['status'] )
+			{
+				return printJSON(self::returnError( logics\ApiError::getError('ERROR_MCHAPPLY_NOT_OPEN') ));
+			}
 			
 			$this->mchApplyData = $mchApplyData;
 		}
