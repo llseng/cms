@@ -32,4 +32,11 @@ return [
     'taglib_begin' => '{',
     // 标签库标签结束标记
     'taglib_end'   => '}',
+    // 输出替换
+    'tpl_replace_string'  =>  [
+    '__ASSETS__'=>'/public/adminStatic/default/assets',
+    '__BOOTSTRAP__'=>'/public/adminStatic/default/bootstrap',
+    '__IMAGES__'=>'/public/adminStatic/default/images',
+    '__VENDORS__'=>'/public/adminStatic/default/vendors',
+]
 ];

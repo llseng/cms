@@ -1,8 +1,20 @@
 <IfModule mod_rewrite.c>
   Options +FollowSymlinks -Multiviews
   RewriteEngine On
+  #开启
 
   #RewriteCond %{REQUEST_FILENAME} !-d
+  #目录早不到
   #RewriteCond %{REQUEST_FILENAME} !-f
+  #文件找不到
+
+  #RewriteCond %{HTTP_REFERER} !^$
+  #来源网址不是空
+  RewriteCond %{REQUEST_URI} !^/public/
+  #请求资源不是 /public/
+  RewriteCond %{REQUEST_FILENAME} !-f
+  #文件早不到
   RewriteRule ^(.*)$ index.php?/$1 [QSA,PT,L]
+  #则跳转到
+
 </IfModule>
